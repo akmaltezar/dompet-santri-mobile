@@ -113,15 +113,6 @@ export default class HomeScreen extends Component {
               </View>
               <Text style={styles.wait}></Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
-              style={[styles.riwayatBox, {flexDirection: 'row'}]}>
-              <Icons name="arrow-bottom-left" size={30} color="#8388FF" />
-              <View style={{marginLeft: 10}}>
-                <Text style={styles.IDNumber}>Bayar : ID 001100011100</Text>
-                <Text style={styles.dates}>08-12-2020</Text>
-                <Text style={styles.priceIsi}>RP 1.000.000,00</Text>
-              </View>
-            </TouchableOpacity> */}
             <TouchableOpacity
               style={[
                 styles.riwayatBox,
@@ -167,24 +158,6 @@ export default class HomeScreen extends Component {
               </View>
               <Text style={styles.succes}>Sukses</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
-              style={[styles.riwayatBox, {flexDirection: 'row'}]}>
-              <Icons name="arrow-bottom-left" size={30} color="#8388FF" />
-              <View style={{marginLeft: 10}}>
-                <Text style={styles.IDNumber}>Bayar : ID 001100011100</Text>
-                <Text style={styles.dates}>08-12-2020</Text>
-                <Text style={styles.priceIsi}>RP 1.000.000,00</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.riwayatBox, {flexDirection: 'row'}]}>
-              <Icons name="arrow-bottom-left" size={30} color="#8388FF" />
-              <View style={{marginLeft: 10}}>
-                <Text style={styles.IDNumber}>Bayar : ID 001100011100</Text>
-                <Text style={styles.dates}>08-12-2020</Text>
-                <Text style={styles.priceIsi}>RP 1.000.000,00</Text>
-              </View>
-            </TouchableOpacity> */}
           </View>
         </ScrollView>
       </View>
