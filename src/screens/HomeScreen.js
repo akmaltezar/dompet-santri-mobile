@@ -28,9 +28,11 @@ export default class HomeScreen extends Component {
                   height: 55,
                   backgroundColor: '#FFF',
                   borderRadius: 55,
-                }}
-              >
-                  <Image  source={require('../assets/images/profilePicture.png')} style={{width: 55, height: 55}} />
+                }}>
+                <Image
+                  source={require('../assets/images/profilePicture.png')}
+                  style={{width: 55, height: 55}}
+                />
               </View>
             </View>
             <View style={styles.saldoBox}>
@@ -158,7 +160,7 @@ export default class HomeScreen extends Component {
                 {flexDirection: 'row', justifyContent: 'space-between'},
               ]}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Icons name="arrow-top-right" size={30} color="#E31212" />
+                <Icons name="arrow-top-right" size={30} color="#E31212" />
                 <View style={{marginLeft: 10}}>
                   <Text style={styles.IDNumber}>Isi Saldo</Text>
                   <Text style={styles.dates}>08-12-2020</Text>
@@ -205,8 +207,9 @@ const styles = StyleSheet.create({
   },
   profileText: {
     fontSize: 18,
+    fontFamily: 'Montserrat-Bold',
     color: '#FFF',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   saldoBox: {
     justifyContent: 'center',
@@ -221,11 +224,13 @@ const styles = StyleSheet.create({
   saldoText: {
     color: '#444',
     fontSize: 16,
+    fontFamily: 'Montserrat-Regular',
   },
   saldoNominal: {
     fontSize: 25,
+    fontFamily: 'Montserrat-Bold',
     color: '#444',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   button: {
     width: 60,
@@ -250,6 +255,7 @@ const styles = StyleSheet.create({
   textButton: {
     marginTop: 10,
     color: '#555',
+    fontFamily: 'Montserrat-Regular',
   },
   riwayatTransaksi: {
     width: '85%',
@@ -259,8 +265,9 @@ const styles = StyleSheet.create({
   textRiwayatTransaksi: {
     marginLeft: 10,
     color: '#8388FF',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 18,
+    fontFamily: 'Montserrat-Bold',
   },
   riwayatBox: {
     width: '100%',
@@ -273,30 +280,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   IDNumber: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 12,
     color: '#444',
+    fontFamily: 'Montserrat-SemiBold',
   },
   dates: {
     fontSize: 12,
     color: '#444',
+    fontFamily: 'Montserrat-Regular',
   },
   priceIsi: {
     fontSize: 12,
     color: '#8388FF',
+    fontFamily: 'Montserrat-Regular',
   },
-  priceTarik:{
+  priceTarik: {
     fontSize: 12,
     color: '#E31212',
+    fontFamily: 'Montserrat-Regular',
   },
   wait: {
     fontSize: 12,
     color: '#FFA216',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily: 'Montserrat-SemiBold',
   },
   succes: {
     fontSize: 12,
     color: '#8388FF',
-    fontWeight: 'bold',
-  }
+    // fontWeight: 'bold',
+    fontFamily: 'Montserrat-SemiBold',
+  },
 });
