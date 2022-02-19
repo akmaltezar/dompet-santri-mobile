@@ -103,10 +103,7 @@ export default class HomeScreen extends Component {
           </View>
           <View style={styles.riwayatTransaksi}>
             <TouchableOpacity
-              style={{flexDirection: 'row', alignItems: 'center'}}
-              onPress={() =>
-                this.props.navigation.navigate('DashboardPengajuanScreen')
-              }>
+              style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icons name="format-list-bulleted" size={30} color="#8388FF" />
               <Text style={styles.textRiwayatTransaksi}>Riwayat Transaksi</Text>
             </TouchableOpacity>
@@ -190,8 +187,9 @@ const styles = StyleSheet.create({
   },
   profileText: {
     fontSize: 18,
+    fontFamily: 'Montserrat-Bold',
     color: '#FFF',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   saldoBox: {
     justifyContent: 'center',
@@ -206,11 +204,13 @@ const styles = StyleSheet.create({
   saldoText: {
     color: '#444',
     fontSize: 16,
+    fontFamily: 'Montserrat-Regular',
   },
   saldoNominal: {
     fontSize: 25,
+    fontFamily: 'Montserrat-Bold',
     color: '#444',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   button: {
     width: 60,
@@ -235,6 +235,7 @@ const styles = StyleSheet.create({
   textButton: {
     marginTop: 10,
     color: '#555',
+    fontFamily: 'Montserrat-Regular',
   },
   riwayatTransaksi: {
     width: '85%',
@@ -244,8 +245,9 @@ const styles = StyleSheet.create({
   textRiwayatTransaksi: {
     marginLeft: 10,
     color: '#8388FF',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 18,
+    fontFamily: 'Montserrat-Bold',
   },
   riwayatBox: {
     width: '100%',
@@ -258,30 +260,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   IDNumber: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 12,
     color: '#444',
+    fontFamily: 'Montserrat-SemiBold',
   },
   dates: {
     fontSize: 12,
     color: '#444',
+    fontFamily: 'Montserrat-Regular',
   },
   priceIsi: {
     fontSize: 12,
     color: '#8388FF',
+    fontFamily: 'Montserrat-Regular',
   },
   priceTarik: {
     fontSize: 12,
     color: '#E31212',
+    fontFamily: 'Montserrat-Regular',
   },
   wait: {
     fontSize: 12,
     color: '#FFA216',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily: 'Montserrat-SemiBold',
   },
   succes: {
     fontSize: 12,
     color: '#8388FF',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily: 'Montserrat-SemiBold',
   },
 });

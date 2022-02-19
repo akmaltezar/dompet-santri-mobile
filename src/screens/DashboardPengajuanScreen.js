@@ -5,10 +5,7 @@ export default class DashboardPengajuan extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Dashboard</Text>
-        </View>
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             paddingVertical: 30,
@@ -19,7 +16,7 @@ export default class DashboardPengajuan extends Component {
             <Text
               style={{
                 fontSize: 14,
-                fontWeight: 'bold',
+                fontFamily: 'Montserrat-SemiBold',
                 color: '#8388FF',
                 marginBottom: 15,
               }}>
@@ -33,13 +30,14 @@ export default class DashboardPengajuan extends Component {
                 fontSize: 14,
                 color: '#000',
                 marginBottom: 15,
+                fontFamily: 'Montserrat-Regular',
               }}>
               Riwayat
             </Text>
             <View style={{height: 2, backgroundColor: '#FFF', width: 100}} />
           </View>
-        </View>
-        <View style={{alignItems: 'center'}}>
+        </View> */}
+        <View style={{alignItems: 'center', marginTop: 15}}>
           <View
             style={{
               width: '90%',
@@ -73,8 +71,12 @@ export default class DashboardPengajuan extends Component {
                   }}
                 />
                 <View>
-                  <Text>Isi Saldo</Text>
-                  <Text>12/12/2021</Text>
+                  <Text style={{fontFamily: 'Montserrat-SemiBold'}}>
+                    Isi Saldo
+                  </Text>
+                  <Text style={{fontFamily: 'Montserrat-Regular'}}>
+                    12/12/2021
+                  </Text>
                 </View>
               </View>
               <View
@@ -87,7 +89,12 @@ export default class DashboardPengajuan extends Component {
                   borderRadius: 5,
                   elevation: 3,
                 }}>
-                <Text style={{fontSize: 12, fontWeight: 'bold', color: '#FFF'}}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: 'Montserrat-SemiBold',
+                    color: '#FFF',
+                  }}>
                   Menunggu
                 </Text>
               </View>
@@ -103,7 +110,12 @@ export default class DashboardPengajuan extends Component {
                 alignItems: 'center',
                 marginTop: 12,
               }}>
-              <Text style={{fontSize: 12, fontWeight: 'bold', color: '#FFF'}}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontFamily: 'Montserrat-SemiBold',
+                  color: '#FFF',
+                }}>
                 Lihat Data
               </Text>
             </TouchableOpacity>
@@ -128,7 +140,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#FFF',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 16,
+    fontFamily: 'Montserrat-Bold',
   },
 });
