@@ -28,9 +28,11 @@ export default class HomeScreen extends Component {
                   height: 55,
                   backgroundColor: '#FFF',
                   borderRadius: 55,
-                }}
-              >
-                  <Image  source={require('../assets/images/profilePicture.png')} style={{width: 55, height: 55}} />
+                }}>
+                <Image
+                  source={require('../assets/images/profilePicture.png')}
+                  style={{width: 55, height: 55}}
+                />
               </View>
             </View>
             <View style={styles.saldoBox}>
@@ -40,13 +42,19 @@ export default class HomeScreen extends Component {
           </View>
           <View style={styles.buttonBox}>
             <View style={styles.buttonGroup}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => this.props.navigation.navigate('ScannerScreen')}>
                 <Icons name="line-scan" size={30} color="#000" />
               </TouchableOpacity>
               <Text style={styles.textButton}>Bayar</Text>
             </View>
             <View style={styles.buttonGroup}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  this.props.navigation.navigate('IsiSaldoScreen')
+                }>
                 <Icons
                   name="format-vertical-align-top"
                   size={30}
@@ -94,10 +102,14 @@ export default class HomeScreen extends Component {
             </View>
           </View>
           <View style={styles.riwayatTransaksi}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{flexDirection: 'row', alignItems: 'center'}}
+              onPress={() =>
+                this.props.navigation.navigate('DashboardPengajuanScreen')
+              }>
               <Icons name="format-list-bulleted" size={30} color="#8388FF" />
               <Text style={styles.textRiwayatTransaksi}>Riwayat Transaksi</Text>
-            </View>
+            </TouchableOpacity>
             <TouchableOpacity
               style={[
                 styles.riwayatBox,
@@ -149,7 +161,7 @@ export default class HomeScreen extends Component {
                 {flexDirection: 'row', justifyContent: 'space-between'},
               ]}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Icons name="arrow-top-right" size={30} color="#E31212" />
+                <Icons name="arrow-top-right" size={30} color="#E31212" />
                 <View style={{marginLeft: 10}}>
                   <Text style={styles.IDNumber}>Isi Saldo</Text>
                   <Text style={styles.dates}>08-12-2020</Text>
@@ -258,7 +270,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#8388FF',
   },
-  priceTarik:{
+  priceTarik: {
     fontSize: 12,
     color: '#E31212',
   },
@@ -271,5 +283,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#8388FF',
     fontWeight: 'bold',
-  }
+  },
 });
