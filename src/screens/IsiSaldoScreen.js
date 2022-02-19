@@ -14,7 +14,7 @@ import {launchCamera} from 'react-native-image-picker';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-const isiSaldo = () => {
+const IsisSaldoScreen = ({navigation}) => {
   const [uri, setUri] = React.useState(null);
   const [resPhoto, setResPhoto] = useState(false);
 
@@ -43,7 +43,7 @@ const isiSaldo = () => {
   return (
     <View>
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-left" size={20} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.title}>Isi Saldo</Text>
@@ -94,7 +94,7 @@ const isiSaldo = () => {
   );
 };
 
-export default isiSaldo;
+export default IsisSaldoScreen;
 
 const styles = StyleSheet.create({
   header: {

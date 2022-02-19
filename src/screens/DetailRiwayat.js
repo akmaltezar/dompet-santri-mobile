@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-class detailRiwayat extends Component {
+class DetailRiwayatScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -50,7 +50,7 @@ class detailRiwayat extends Component {
     );
   }
 }
-export default detailRiwayat;
+export default DetailRiwayatScreen;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',

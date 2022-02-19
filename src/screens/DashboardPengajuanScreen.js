@@ -5,10 +5,7 @@ export default class DashboardPengajuan extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Dashboard</Text>
-        </View>
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             paddingVertical: 30,
@@ -39,8 +36,8 @@ export default class DashboardPengajuan extends Component {
             </Text>
             <View style={{height: 2, backgroundColor: '#FFF', width: 100}} />
           </View>
-        </View>
-        <View style={{alignItems: 'center'}}>
+        </View> */}
+        <View style={{alignItems: 'center', marginTop: 15}}>
           <View
             style={{
               width: '90%',

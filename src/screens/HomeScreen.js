@@ -42,13 +42,19 @@ export default class HomeScreen extends Component {
           </View>
           <View style={styles.buttonBox}>
             <View style={styles.buttonGroup}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => this.props.navigation.navigate('ScannerScreen')}>
                 <Icons name="line-scan" size={30} color="#000" />
               </TouchableOpacity>
               <Text style={styles.textButton}>Bayar</Text>
             </View>
             <View style={styles.buttonGroup}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  this.props.navigation.navigate('IsiSaldoScreen')
+                }>
                 <Icons
                   name="format-vertical-align-top"
                   size={30}
@@ -96,10 +102,11 @@ export default class HomeScreen extends Component {
             </View>
           </View>
           <View style={styles.riwayatTransaksi}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icons name="format-list-bulleted" size={30} color="#8388FF" />
               <Text style={styles.textRiwayatTransaksi}>Riwayat Transaksi</Text>
-            </View>
+            </TouchableOpacity>
             <TouchableOpacity
               style={[
                 styles.riwayatBox,
