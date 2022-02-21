@@ -64,7 +64,11 @@ export default class HomeScreen extends Component {
               <Text style={styles.textButton}>Isi Saldo</Text>
             </View>
             <View style={styles.buttonGroup}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  this.props.navigation.navigate('TarikDanaScreen')
+                }>
                 <Icons
                   name="format-vertical-align-bottom"
                   size={30}
@@ -103,6 +107,7 @@ export default class HomeScreen extends Component {
           </View>
           <View style={styles.riwayatTransaksi}>
             <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Dashboard')}
               style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icons name="format-list-bulleted" size={30} color="#8388FF" />
               <Text style={styles.textRiwayatTransaksi}>Riwayat Transaksi</Text>
