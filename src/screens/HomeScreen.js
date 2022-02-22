@@ -7,10 +7,59 @@ import {
   Image,
 } from 'react-native';
 import React, {Component} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class HomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: '',
+      token: '',
+      name: '',
+      id: '',
+      balance: 0,
+    };
+  }
+  componentDidMount() {
+    AsyncStorage.getItem('token')
+      .then(value => {
+        if (value != null) {
+          this.setState({token: value});
+        } else {
+          this.props.navigation.replace('LoginScreen');
+        }
+      })
+      .then(() => this.userData())
+      .catch(err => {
+        console.log(err);
+      });
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.userData();
+    });
+  }
+
+  userData() {
+    fetch('https://aplikasi-santri.herokuapp.com/api/user', {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    })
+      .then(response => response.json())
+      .then(result => {
+        this.setState({
+          name: result.name,
+          id: result.id,
+          balance: result.balance,
+        });
+        console.log(result);
+      })
+      .catch(error => console.log('error', error));
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -19,8 +68,8 @@ export default class HomeScreen extends Component {
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <View>
-                <Text style={styles.profileText}>Muhammad Afif</Text>
-                <Text style={styles.profileText}>ID 1234567</Text>
+                <Text style={styles.profileText}>{this.state.name}</Text>
+                <Text style={styles.profileText}>{this.state.id}</Text>
               </View>
               <View
                 style={{
@@ -37,7 +86,7 @@ export default class HomeScreen extends Component {
             </View>
             <View style={styles.saldoBox}>
               <Text style={styles.saldoText}>Saldo</Text>
-              <Text style={styles.saldoNominal}>RP 1.000.000,00</Text>
+              <Text style={styles.saldoNominal}>{this.state.balance}</Text>
             </View>
           </View>
           <View style={styles.buttonBox}>

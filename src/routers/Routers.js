@@ -9,6 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import IsiSaldoScreen from '../screens/IsiSaldoScreen';
 import TarikDanaScreen from '../screens/tarikdana';
 import ScannerScreen from '../screens/ScannerScreen';
+import DetailRiwayat from '../screens/DetailRiwayat';
 
 import Dashboard from './Dashboard';
 
@@ -33,11 +34,13 @@ export default class Routers extends Component {
               headerShown: true,
               headerTitleAlign: 'center',
               headerTitleStyle: {
+                fontFamily: 'Montserrat-Bold',
                 color: '#FFF',
                 fontWeight: '800',
               },
             }}
           />
+          <Stack.Screen name="DetailRiwayat" component={DetailRiwayat} />
         </Stack.Navigator>
       </NavigationContainer>
     );

@@ -11,12 +11,13 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-class DetailRiwayatScreen extends Component {
+class DetailRiwayat extends Component {
   render() {
+    const navigation = this.props.navigation;
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon name="arrow-left" size={20} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.title}>Detail Riwayat</Text>
@@ -50,7 +51,7 @@ class DetailRiwayatScreen extends Component {
     );
   }
 }
-export default DetailRiwayatScreen;
+export default DetailRiwayat;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',

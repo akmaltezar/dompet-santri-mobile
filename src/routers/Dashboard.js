@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import DashboardPengajuanScreen from '../screens/DashboardPengajuanScreen';
-import Dash2 from '../screens/dash2'
+import Dash2 from '../screens/dash2';
 
 const Tab = createMaterialTopTabNavigator();
 

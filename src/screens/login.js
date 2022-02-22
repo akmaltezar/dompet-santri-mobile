@@ -8,6 +8,7 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ww = Dimensions.get('window').width;
@@ -40,7 +41,7 @@ export default class Login extends React.Component {
       .then(result => {
         console.log(result.data.token);
         if (result.message === 'Success') {
-          await AsyncStorage.setItem('Token', result.data.token)
+          // await AsyncStorage.setItem('token', result.data.token);
           alert('Login Success.');
           this.props.navigation.replace('HomeScreen');
         } else {
@@ -69,18 +70,32 @@ export default class Login extends React.Component {
           backgroundColor: 'white',
         }}>
         <View style={{alignSelf: 'flex-start', marginLeft: 50}}>
-          <Text style={{color: '#8388FF', fontSize: 24}}>Dompet Santri</Text>
           <Text
-            style={{color: '#8388FF', fontSize: 24, alignSelf: 'flex-start'}}>
+            style={{
+              color: '#8388FF',
+              fontSize: 24,
+              fontFamily: 'Montserrat-Bold',
+            }}>
+            Dompet Santri
+          </Text>
+          <Text
+            style={{
+              color: '#8388FF',
+              fontSize: 24,
+              alignSelf: 'flex-start',
+              fontFamily: 'Montserrat-Bold',
+            }}>
             Login
           </Text>
         </View>
         <View style={{marginTop: 20, marginBottom: 30}}>
           <View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                // source={require('../assets/images/email.png')}
-                style={{width: 24, height: 24, marginRight: 10}}
+              <Icon
+                name="email-outline"
+                size={25}
+                color="#8388FF"
+                // style={{width: 24, height: 24, marginRight: 10}}
               />
               <TextInput
                 placeholder="Email"
@@ -96,9 +111,11 @@ export default class Login extends React.Component {
           </View>
           <View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                // source={require('../assets/images/lock.png')}
-                style={{width: 24, height: 24, marginRight: 10}}
+              <Icon
+                name="lock-outline"
+                size={25}
+                color="#8388FF"
+                // style={{width: 24, height: 24, marginRight: 10}}
               />
               <TextInput
                 placeholder="Kata Sandi"
@@ -127,7 +144,9 @@ export default class Login extends React.Component {
             {this.state.loading ? (
               <ActivityIndicator size={25} color="#FFF" />
             ) : (
-              <Text style={{color: 'white'}}>MASUK</Text>
+              <Text style={{color: 'white', fontFamily: 'Montserrat-SemiBold'}}>
+                MASUK
+              </Text>
             )}
           </TouchableOpacity>
           <TouchableOpacity
@@ -139,7 +158,9 @@ export default class Login extends React.Component {
               justifyContent: 'center',
               borderRadius: 10,
             }}>
-            <Text style={{color: 'white'}}>DAFTAR</Text>
+            <Text style={{color: 'white', fontFamily: 'Montserrat-SemiBold'}}>
+              DAFTAR
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

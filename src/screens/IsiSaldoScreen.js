@@ -14,7 +14,7 @@ import {launchCamera} from 'react-native-image-picker';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-const IsisSaldoScreen = ({navigation}) => {
+const IsiSaldoScreen = ({navigation}) => {
   const [uri, setUri] = React.useState(null);
   const [resPhoto, setResPhoto] = useState(false);
 
@@ -94,7 +94,7 @@ const IsisSaldoScreen = ({navigation}) => {
   );
 };
 
-export default IsisSaldoScreen;
+export default IsiSaldoScreen;
 
 const styles = StyleSheet.create({
   header: {
