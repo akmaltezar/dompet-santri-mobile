@@ -107,7 +107,7 @@ export default class HomeScreen extends Component {
           </View>
           <View style={styles.riwayatTransaksi}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Dashboard')}
+              onPress={() => this.props.navigation.replace('Dashboard')}
               style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icons name="format-list-bulleted" size={30} color="#8388FF" />
               <Text style={styles.textRiwayatTransaksi}>Riwayat Transaksi</Text>
