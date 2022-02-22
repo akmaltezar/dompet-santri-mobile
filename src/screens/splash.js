@@ -1,12 +1,22 @@
 import React from 'react';
 import {View, Text, ActivityIndicator} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class SplashScreen extends React.Component {
   constructor(props) {
     super(props);
     setTimeout(() => {
-      this.props.navigation.replace('LoginScreen');
+      AsyncStorage.getItem('token').then(value => {
+        if (value != null) {
+          this.props.navigation.replace('HomeScreen');
+        } else {
+          this.props.navigation.replace('LoginScreen');
+        }
+      });
     }, 3000);
+    // setTimeout(() => {
+    //   this.props.navigation.replace('LoginScreen');
+    // }, 3000);
   }
   render() {
     return (
@@ -17,7 +27,10 @@ export default class SplashScreen extends React.Component {
           flex: 1,
           backgroundColor: '#8388FF',
         }}>
-        <Text style={{color: 'white', fontSize: 30}}>DS</Text>
+        <Text
+          style={{color: 'white', fontSize: 30, fontFamily: 'Montserrat-Bold'}}>
+          DS
+        </Text>
         <ActivityIndicator size="large" color="white" />
       </View>
     );
