@@ -25,7 +25,7 @@ export default class ScannerScreen extends Component {
     return (
       <View>
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon name="arrow-left" size={20} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.title}>Isi Saldo</Text>
