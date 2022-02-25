@@ -41,7 +41,7 @@ export default class Login extends React.Component {
       .then(result => {
         console.log(result.data.token);
         if (result.message === 'Success') {
-          await AsyncStorage.setItem('token', result.data.token);
+          AsyncStorage.setItem('token', result.data.token);
           alert('Login Success.');
           this.props.navigation.replace('HomeScreen');
         } else {
