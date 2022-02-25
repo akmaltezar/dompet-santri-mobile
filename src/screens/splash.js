@@ -14,9 +14,6 @@ export default class SplashScreen extends React.Component {
         }
       });
     }, 3000);
-    // setTimeout(() => {
-    //   this.props.navigation.replace('LoginScreen');
-    // }, 3000);
   }
   render() {
     return (
