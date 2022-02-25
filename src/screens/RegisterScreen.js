@@ -3,6 +3,42 @@ import { Text, StyleSheet, View, TouchableOpacity, TextInput, Image} from 'react
   
   
   export default class App extends Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        name: '',
+        email: '',
+        password:'',
+        password_confirmation: '',
+        roles: 'merchant'
+      };
+    }
+  
+    Register = () =>{
+      fetch('https://aplikasi-santri.herokuapp.com/api/registeruser', {
+        method:'POST',
+        headers:{
+          Accept:'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: this.state.name,
+          email: this.state.email,
+          password: this.state.password,
+          password_confirmation: this.state.password_confirmation,
+          roles: this.state.roles,
+        }),
+      })
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          this.props.navigation.replace('LoginScreen');
+        })
+        .catch(error => {
+          console.log('error', error);
+        })
+    }
+
     render() {
       return (
         <View style={{flex:1,justifyContent:'center'}}>
@@ -12,25 +48,30 @@ import { Text, StyleSheet, View, TouchableOpacity, TextInput, Image} from 'react
             <View style={styles.tibox}>
               <View style={styles.imgisi}>
                 <Image style={styles.imgg} source={require('./src/assets/images/org.png')}/>
-                <TextInput placeholder='Nama Lengkap' style={styles.ti}/>
+                <TextInput placeholder='Nama Lengkap' style={styles.ti}
+                onChangeText={value => this.setState({name: value})}/>
               </View>
               <View style={styles.imgisi}>
               <Image style={styles.imgg} source={require('./src/assets/images/mail.png')}/>
-                <TextInput placeholder='Email' style={styles.ti}/>
+                <TextInput placeholder='Email' style={styles.ti}
+                onChangeText={value => this.setState({email: value})}/>
               </View>
               <View style={styles.imgisi}>
               <Image style={styles.imgg} source={require('./src/assets/images/lock.png')}/>
-                <TextInput placeholder='Kata Sandi' style={styles.ti}/>
+                <TextInput placeholder='Kata Sandi' style={styles.ti}
+                onChangeText={value => this.setState({password: value})}/>
                 </View>
             </View>
 
             <View style={styles.tibutton}>
               
-              <TouchableOpacity style={styles.df}>
+              <TouchableOpacity style={styles.df}
+              onPress={() => this.Register()}>
                 <Text style={styles.dftext}>DAFTAR</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={[styles.df , styles.bu2]}>
+              <TouchableOpacity style={[styles.df , styles.bu2]}
+              onPress={()=>navigation.navigate('LoginScreen')}>
                 <Text style={styles.dftext}>MASUK</Text>
               </TouchableOpacity>
             </View>
