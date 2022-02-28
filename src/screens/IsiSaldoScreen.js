@@ -4,27 +4,43 @@ import {
   View,
   Image,
   Dimensions,
+  Modal,
   TextInput,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {launchCamera} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const IsiSaldoScreen = ({navigation}) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [token, setToken] = useState('');
+  const [nominal, setNominal] = useState(0);
   const [uri, setUri] = React.useState(null);
   const [resPhoto, setResPhoto] = useState(false);
+  const [image, setImage] = useState({
+    name: '',
+    uri: '',
+    type: '',
+  });
 
-  const takePhoto = () => {
+  const openCamera = () => {
     const options = {
       maxHeight: 600,
       maxWidth: 1250,
       selectionLimit: 0,
       mediaType: 'photo',
       includeBase64: false,
+      type: 'image/jpeg',
     };
     launchCamera(options, res => {
       if (res.didCancel) {
@@ -33,15 +49,86 @@ const IsiSaldoScreen = ({navigation}) => {
         console.log(res.errorMessage);
       } else {
         setUri(res.assets[0].uri);
+        setImage({
+          name: res.assets[0].fileName,
+          uri: res.assets[0].uri,
+          type: res.assets[0].type,
+        });
         setResPhoto(true);
         console.log(res);
         console.log(setUri);
+        setModalVisible(!modalVisible);
       }
     });
   };
 
+  const openGallery = () => {
+    const options = {
+      maxHeight: 600,
+      maxWidth: 1250,
+      selectionLimit: 0,
+      mediaType: 'photo',
+      includeBase64: false,
+      type: 'image/jpeg',
+    };
+    launchImageLibrary(options, res => {
+      if (res.didCancel) {
+        console.log('User Canceled Gallery');
+      } else if (res.errorCode) {
+        console.log(res.errorCode);
+      } else {
+        setUri(res.assets[0].uri);
+        setImage({
+          name: res.assets[0].fileName,
+          uri: res.assets[0].uri,
+          type: res.assets[0].type,
+        });
+        setResPhoto: true;
+        console.log(res);
+        console.log(setUri);
+        setModalVisible(!modalVisible);
+      }
+    });
+  };
+
+  useEffect(() => {
+    AsyncStorage.getItem('token')
+      .then(value => {
+        if (value != null) {
+          setToken(value);
+        } else {
+          navigation.replace('LoginScreen');
+        }
+      })
+      .catch(err => {
+        console.log('ini error', err);
+      });
+  });
+
+  function IsiSaldo() {
+    console.log('ini image', image);
+    const formdata = new FormData();
+    formdata.append('nominal', nominal);
+    formdata.append('pict', image);
+
+    fetch('https://aplikasi-santri.herokuapp.com/api/isi', {
+      method: 'POST',
+      body: formdata,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('ini result', result);
+        navigation.goBack('HomeScreen');
+      })
+      .catch(error => console.log('ini error', error));
+  }
+
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-left" size={20} color="#fff" />
@@ -68,8 +155,10 @@ const IsiSaldoScreen = ({navigation}) => {
         <TextInput
           style={styles.input}
           keyboardType="number-pad"
-          placeholder="Nominal Isi Saldo"></TextInput>
-        <TouchableOpacity onPress={() => takePhoto()}>
+          placeholder="Nominal Isi Saldo"
+          value={nominal}
+          onChangeText={value => setNominal(value)}></TextInput>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           {resPhoto ? (
             <Image
               source={{uri: uri}}
@@ -86,10 +175,78 @@ const IsiSaldoScreen = ({navigation}) => {
             </View>
           )}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => IsiSaldo()}>
           <Text style={styles.buttonText}>Kirim</Text>
         </TouchableOpacity>
       </View>
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          this.setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.modalView}>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#8388FF',
+              paddingVertical: 10,
+              marginVertical: 4,
+              width: screenWidth * 0.5,
+              borderRadius: 12,
+            }}
+            onPress={() => openCamera()}>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: '#FFFFFF',
+                fontFamily: 'Montserrat-SemiBold',
+                fontSize: 14,
+              }}>
+              Ambil dengan Kamera
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#FFE066',
+              paddingVertical: 10,
+              marginVertical: 4,
+              width: screenWidth * 0.5,
+              borderRadius: 12,
+            }}
+            onPress={() => openGallery()}>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: '#FFFFFF',
+                fontFamily: 'Montserrat-SemiBold',
+                fontSize: 14,
+              }}>
+              Ambil dari Galeri
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#808080',
+              paddingVertical: 10,
+              marginVertical: 4,
+              width: screenWidth * 0.5,
+              borderRadius: 12,
+            }}
+            onPress={() => setModalVisible(!modalVisible)}>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: '#FFFFFF',
+                fontFamily: 'Montserrat-SemiBold',
+                fontSize: 14,
+              }}>
+              Batalkan
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -163,5 +320,16 @@ const styles = StyleSheet.create({
     color: '#FFFF',
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 15,
+  },
+  modalView: {
+    // borderWidth: 1,
+    // borderColor: '#C4C4C4',
+    backgroundColor: '#ffffff',
+    padding: 10,
+    borderRadius: 12,
+    elevation: 30,
+    position: 'absolute',
+    top: hp('34%'),
+    left: wp('22%'),
   },
 });
