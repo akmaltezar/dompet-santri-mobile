@@ -86,7 +86,9 @@ export default class HomeScreen extends Component {
             </View>
             <View style={styles.saldoBox}>
               <Text style={styles.saldoText}>Saldo</Text>
-              <Text style={styles.saldoNominal}>{this.state.balance}</Text>
+              <Text style={styles.saldoNominal}>
+                Rp. {this.state.balance},-
+              </Text>
             </View>
           </View>
           <View style={styles.buttonBox}>
