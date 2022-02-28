@@ -61,8 +61,8 @@ export default class HomeScreen extends Component {
   }
 
   logOut() {
-    AsyncStorage.clear()
-    this.props.navigation.replace('LoginScreen')
+    AsyncStorage.clear();
+    this.props.navigation.replace('LoginScreen');
   }
 
   componentWillUnmount() {
@@ -98,7 +98,9 @@ export default class HomeScreen extends Component {
             </View>
             <View style={styles.saldoBox}>
               <Text style={styles.saldoText}>Saldo</Text>
-              <Text style={styles.saldoNominal}>Rp {this.state.balance}</Text>
+              <Text style={styles.saldoNominal}>
+                Rp. {this.state.balance},-
+              </Text>
             </View>
           </View>
           <View style={styles.buttonBox}>
@@ -160,8 +162,9 @@ export default class HomeScreen extends Component {
               },
             ]}>
             <View style={{alignItems: 'center'}}>
-              <TouchableOpacity style={styles.button} 
-              onPress={() => this.logOut()}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => this.logOut()}>
                 <Icons name="logout" size={30} color="#000" />
               </TouchableOpacity>
               <Text style={styles.textButton}>Keluar</Text>
