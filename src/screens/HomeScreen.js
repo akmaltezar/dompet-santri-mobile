@@ -60,6 +60,18 @@ export default class HomeScreen extends Component {
       .catch(error => console.log('error', error));
   }
 
+  logOut() {
+    AsyncStorage.clear();
+    this.props.navigation.replace('LoginScreen');
+  }
+
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -69,7 +81,7 @@ export default class HomeScreen extends Component {
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <View>
                 <Text style={styles.profileText}>{this.state.name}</Text>
-                <Text style={styles.profileText}>{this.state.id}</Text>
+                <Text style={styles.profileText}>ID {this.state.id}</Text>
               </View>
               <View
                 style={{
@@ -150,7 +162,9 @@ export default class HomeScreen extends Component {
               },
             ]}>
             <View style={{alignItems: 'center'}}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => this.logOut()}>
                 <Icons name="logout" size={30} color="#000" />
               </TouchableOpacity>
               <Text style={styles.textButton}>Keluar</Text>
