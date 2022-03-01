@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import SplashScreen from '../screens/splash';
 import LoginScreen from '../screens/login';
+import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
 import IsiSaldoScreen from '../screens/IsiSaldoScreen';
 import TarikDanaScreen from '../screens/tarikdana';
@@ -22,6 +23,7 @@ export default class Routers extends Component {
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="IsiSaldoScreen" component={IsiSaldoScreen} />
           <Stack.Screen name="TarikDanaScreen" component={TarikDanaScreen} />

@@ -39,8 +39,8 @@ export default class Login extends React.Component {
     fetch('https://aplikasi-santri.herokuapp.com/api/login', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result.data.token);
-        if (result.message === 'Success') {
+        console.log(result);
+        if (result.code === 200) {
           AsyncStorage.setItem('token', result.data.token);
           alert('Login Success.');
           this.props.navigation.replace('HomeScreen');
@@ -157,7 +157,8 @@ export default class Login extends React.Component {
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: 10,
-            }}>
+            }}
+            onPress={() => this.props.navigation.navigate('RegisterScreen')}>
             <Text style={{color: 'white', fontFamily: 'Montserrat-SemiBold'}}>
               DAFTAR
             </Text>
