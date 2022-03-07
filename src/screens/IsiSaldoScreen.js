@@ -6,6 +6,7 @@ import {
   Dimensions,
   Modal,
   TextInput,
+  ActivityIndicator,
   TouchableOpacity,
   ToastAndroid,
 } from 'react-native';
@@ -32,6 +33,7 @@ const IsiSaldoScreen = ({navigation}) => {
     uri: '',
     type: '',
   });
+  const [loading, setLoading] = useState(false);
 
   const openCamera = () => {
     const options = {
@@ -106,6 +108,7 @@ const IsiSaldoScreen = ({navigation}) => {
   });
 
   function IsiSaldo() {
+    setLoading(true);
     console.log('ini image', image);
     const formdata = new FormData();
     formdata.append('nominal', nominal);
@@ -124,7 +127,9 @@ const IsiSaldoScreen = ({navigation}) => {
         console.log('ini result', result);
         navigation.goBack('HomeScreen');
       })
-      .catch(error => console.log('ini error', error));
+      .catch(error => console.log('ini error', error))
+      .finally(() => setLoading(false));
+
   }
 
   return (
@@ -176,7 +181,11 @@ const IsiSaldoScreen = ({navigation}) => {
           )}
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => IsiSaldo()}>
-          <Text style={styles.buttonText}>Kirim</Text>
+          {loading ? (
+            <ActivityIndicator size={22} color="#FFF" />
+          ) : (
+            <Text style={styles.buttonText}>Kirim</Text>
+          )}
         </TouchableOpacity>
       </View>
       <Modal
