@@ -37,8 +37,6 @@ const IsiSaldoScreen = ({navigation}) => {
 
   const openCamera = () => {
     const options = {
-      maxHeight: 600,
-      maxWidth: 1250,
       selectionLimit: 0,
       mediaType: 'photo',
       includeBase64: false,
@@ -66,8 +64,6 @@ const IsiSaldoScreen = ({navigation}) => {
 
   const openGallery = () => {
     const options = {
-      maxHeight: 600,
-      maxWidth: 1250,
       selectionLimit: 0,
       mediaType: 'photo',
       includeBase64: false,
@@ -129,7 +125,6 @@ const IsiSaldoScreen = ({navigation}) => {
       })
       .catch(error => console.log('ini error', error))
       .finally(() => setLoading(false));
-
   }
 
   return (

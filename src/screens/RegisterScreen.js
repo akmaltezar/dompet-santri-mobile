@@ -73,12 +73,12 @@ export default class App extends Component {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result)
-        if(result.code === 200) {
-          alert("Register Success")
-          this.props.navigation.navigate('LoginScreen')
+        console.log(result);
+        if (result.code === 200) {
+          alert('Register Success');
+          this.props.navigation.navigate('LoginScreen');
         } else {
-          alert("Fill the form correctly.")
+          alert('Fill the form correctly.');
         }
       })
       .catch(error => console.log('error', error))

@@ -23,12 +23,12 @@ class DetailRiwayat extends Component {
           <Text style={styles.title}>Detail Riwayat</Text>
         </View>
         <View style={styles.detailView}>
-          <View style={styles.variableView}>
-            <Text style={styles.variable}>User Id :</Text>
-            <Text style={styles.variable}>Jenis Transaksi :</Text>
-            <Text style={styles.variable}>Tanggal Transaksi :</Text>
-            <Text style={styles.variable}>Nominal :</Text>
-            <Text style={styles.variable}>Bukti Transfer :</Text>
+          <View style={styles.dataView}>
+            <Text style={styles.data}>User Id :</Text>
+            <Text style={styles.data}>Jenis Transaksi :</Text>
+            <Text style={styles.data}>Tanggal Transaksi :</Text>
+            <Text style={styles.data}>Nominal :</Text>
+            <Text style={styles.data}>Bukti Transfer :</Text>
           </View>
           <View style={styles.valueView}>
             <Text style={styles.value}>00044555</Text>
@@ -86,13 +86,13 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.4,
     borderRightWidth: 0.4,
   },
-  variableView: {
+  dataView: {
     flexDirection: 'column',
   },
   valueView: {
     flexDirection: 'column',
   },
-  variable: {
+  data: {
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
   },

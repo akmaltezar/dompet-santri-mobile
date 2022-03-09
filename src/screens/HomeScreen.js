@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Alert,
 } from 'react-native';
 import React, {Component} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -82,7 +83,7 @@ export default class HomeScreen extends Component {
         //   status : result.data[0].status
         // })
       })
-      .catch(error => console.log('ini error', error));
+      .catch(error => console.log('itu error', error));
   }
 
   logOut() {
@@ -93,23 +94,35 @@ export default class HomeScreen extends Component {
         Authorization: `Bearer ${this.state.token}`,
       },
     };
-    
-    fetch("https://aplikasi-santri.herokuapp.com/api/logout", requestOptions)
+
+    fetch('https://aplikasi-santri.herokuapp.com/api/logout', requestOptions)
       .then(response => response.text())
       .then(result => {
-        console.log(result)
+        console.log(result);
         AsyncStorage.clear();
         this.props.navigation.replace('LoginScreen');
-        alert(result.message);
+        // alert(result.message);
       })
       .catch(error => console.log('error', error));
   }
+
+  WarningLogout = () =>
+    Alert.alert('Perhatian !', 'Anda yakin ingin keluar ?', [
+      {
+        text: 'Batal',
+      },
+      {
+        text: 'Ya',
+        onPress: () => this.logOut(),
+      },
+    ]);
 
   componentWillUnmount() {
     // fix Warning: Can't perform a React state update on an unmounted component
     this.setState = (state, callback) => {
       return;
     };
+    this.unsubscribe();
   }
 
   render() {
@@ -204,7 +217,7 @@ export default class HomeScreen extends Component {
             <View style={{alignItems: 'center'}}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => this.logOut()}>
+                onPress={() => this.WarningLogout()}>
                 <Icons name="logout" size={30} color="#000" />
               </TouchableOpacity>
               <Text style={styles.textButton}>Keluar</Text>
@@ -293,9 +306,11 @@ export default class HomeScreen extends Component {
                       />
                       <View style={{marginLeft: 10}}>
                         <Text style={styles.IDNumber}>Isi Saldo</Text>
-                        <Text style={styles.dates}>{value.created_at}</Text>
+                        <Text style={styles.dates}>
+                          {value.created_at.substr(0, 10)}
+                        </Text>
                         <Text style={styles.priceTarik}>
-                          RP {value.nominal}
+                          Rp. {value.nominal} ,-
                         </Text>
                       </View>
                     </View>
