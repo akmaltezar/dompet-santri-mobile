@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Alert,
 } from 'react-native';
 import React, {Component} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,6 +21,7 @@ export default class HomeScreen extends Component {
       name: '',
       id: '',
       balance: 0,
+      data: [],
     };
   }
   componentDidMount() {
@@ -31,12 +33,16 @@ export default class HomeScreen extends Component {
           this.props.navigation.replace('LoginScreen');
         }
       })
-      .then(() => this.userData())
+      .then(() => {
+        this.userData();
+        this.getPengajuan();
+      })
       .catch(err => {
         console.log(err);
       });
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.userData();
+      this.getPengajuan();
     });
   }
 
@@ -60,16 +66,63 @@ export default class HomeScreen extends Component {
       .catch(error => console.log('error', error));
   }
 
-  logOut() {
-    AsyncStorage.clear();
-    this.props.navigation.replace('LoginScreen');
+  getPengajuan() {
+    console.log('INI TOKEN', this.state.token);
+    fetch('https://aplikasi-santri.herokuapp.com/api/pengajuan', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('INI DATA', result.data);
+        this.setState({data: result.data});
+        // this.setState
+        // ({created_at : result.data[0].created_at,
+        //   status : result.data[0].status
+        // })
+      })
+      .catch(error => console.log('itu error', error));
   }
+
+  logOut() {
+    var requestOptions = {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    };
+
+    fetch('https://aplikasi-santri.herokuapp.com/api/logout', requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        console.log(result);
+        AsyncStorage.clear();
+        this.props.navigation.replace('LoginScreen');
+        // alert(result.message);
+      })
+      .catch(error => console.log('error', error));
+  }
+
+  WarningLogout = () =>
+    Alert.alert('Perhatian !', 'Anda yakin ingin keluar ?', [
+      {
+        text: 'Batal',
+      },
+      {
+        text: 'Ya',
+        onPress: () => this.logOut(),
+      },
+    ]);
 
   componentWillUnmount() {
     // fix Warning: Can't perform a React state update on an unmounted component
     this.setState = (state, callback) => {
       return;
     };
+    this.unsubscribe();
   }
 
   render() {
@@ -164,7 +217,7 @@ export default class HomeScreen extends Component {
             <View style={{alignItems: 'center'}}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => this.logOut()}>
+                onPress={() => this.WarningLogout()}>
                 <Icons name="logout" size={30} color="#000" />
               </TouchableOpacity>
               <Text style={styles.textButton}>Keluar</Text>
@@ -177,7 +230,7 @@ export default class HomeScreen extends Component {
               <Icons name="format-list-bulleted" size={30} color="#8388FF" />
               <Text style={styles.textRiwayatTransaksi}>Riwayat Transaksi</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[
                 styles.riwayatBox,
                 {flexDirection: 'row', justifyContent: 'space-between'},
@@ -236,7 +289,40 @@ export default class HomeScreen extends Component {
                 </View>
               </View>
               <Text style={styles.succes}>Sukses</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            {this.state.data.map((value, index) => {
+              return (
+                <View key={index}>
+                  <TouchableOpacity
+                    style={[
+                      styles.riwayatBox,
+                      {flexDirection: 'row', justifyContent: 'space-between'},
+                    ]}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <Icons
+                        name="arrow-bottom-left"
+                        size={30}
+                        color="#8388FF"
+                      />
+                      <View style={{marginLeft: 10}}>
+                        <Text style={styles.IDNumber}>Isi Saldo</Text>
+                        <Text style={styles.dates}>
+                          {value.created_at.substr(0, 10)}
+                        </Text>
+                        <Text style={styles.priceTarik}>
+                          Rp. {value.nominal} ,-
+                        </Text>
+                      </View>
+                    </View>
+                    {value.status === 'Waiting' ? (
+                      <Text style={styles.wait}>{value.status}</Text>
+                    ) : (
+                      <Text style={styles.succes}>{value.status}</Text>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
           </View>
         </ScrollView>
       </View>
