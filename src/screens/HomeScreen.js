@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import React, {Component} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class HomeScreen extends Component {
