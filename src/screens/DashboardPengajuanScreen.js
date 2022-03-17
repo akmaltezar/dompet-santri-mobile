@@ -38,7 +38,7 @@ export default class DashboardPengajuan extends Component {
 
   getPengajuan() {
     console.log('INI TOKEN', this.state.token);
-    fetch('https://aplikasi-santri.herokuapp.com/api/pengajuan', {
+    fetch('https://aplikasi-santri.herokuapp.com/api/coba', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.state.token}`,
@@ -48,10 +48,10 @@ export default class DashboardPengajuan extends Component {
       .then(result => {
         console.log('INI DATA', result.data);
         this.setState({data: result.data});
-        // this.setState
-        // ({created_at : result.data[0].created_at,
-        //   status : result.data[0].status
-        // })
+        // this.setState({
+        //   created_at: result.data[0].created_at,
+        //   status: result.data[0].status,
+        // });
       })
       .catch(error => console.log('ini error', error));
   }
@@ -175,3 +175,4 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
   },
 });
+

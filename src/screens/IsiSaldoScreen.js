@@ -81,7 +81,7 @@ const IsiSaldoScreen = ({navigation}) => {
           uri: res.assets[0].uri,
           type: res.assets[0].type,
         });
-        setResPhoto: true;
+        setResPhoto(true);
         console.log(res);
         console.log(setUri);
         setModalVisible(!modalVisible);
@@ -326,8 +326,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   modalView: {
-    // borderWidth: 1,
-    // borderColor: '#C4C4C4',
     backgroundColor: '#ffffff',
     padding: 10,
     borderRadius: 12,
