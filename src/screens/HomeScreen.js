@@ -21,6 +21,7 @@ export default class HomeScreen extends Component {
       id: '',
       balance: 0,
       data: [],
+      detail_id: '',
     };
   }
   componentDidMount() {
@@ -60,14 +61,14 @@ export default class HomeScreen extends Component {
           id: result.id,
           balance: result.balance,
         });
-        console.log(result);
+        // console.log(result);
       })
       .catch(error => console.log('error', error));
   }
 
   getPengajuan() {
-    console.log('INI TOKEN', this.state.token);
-    fetch('https://aplikasi-santri.herokuapp.com/api/pengajuan', {
+    // console.log('INI TOKEN', this.state.token);
+    fetch('https://aplikasi-santri.herokuapp.com/api/coba', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.state.token}`,
@@ -83,6 +84,21 @@ export default class HomeScreen extends Component {
         // })
       })
       .catch(error => console.log('itu error', error));
+  }
+
+  detailPengajuan() {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    };
+    
+    fetch("https://aplikasi-santri.herokuapp.com/api/detail/1", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
   }
 
   logOut() {
@@ -296,7 +312,9 @@ export default class HomeScreen extends Component {
                     style={[
                       styles.riwayatBox,
                       {flexDirection: 'row', justifyContent: 'space-between'},
-                    ]}>
+                    ]}
+                    onPress={() => this.detailPengajuan()}
+                    >
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Icons
                         name="arrow-bottom-left"
