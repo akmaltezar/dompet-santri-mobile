@@ -38,7 +38,7 @@ export default class DashboardPengajuan extends Component {
 
   getPengajuan() {
     console.log('INI TOKEN', this.state.token);
-    fetch('https://aplikasi-santri.herokuapp.com/api/pengajuan', {
+    fetch('https://aplikasi-santri.herokuapp.com/api/coba', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.state.token}`,
