@@ -94,8 +94,8 @@ export default class HomeScreen extends Component {
         Authorization: `Bearer ${this.state.token}`,
       },
     };
-    
-    fetch("https://aplikasi-santri.herokuapp.com/api/detail/1", requestOptions)
+
+    fetch('https://aplikasi-santri.herokuapp.com/api/detail/1', requestOptions)
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
@@ -209,7 +209,11 @@ export default class HomeScreen extends Component {
               <Text style={styles.textButton}>Tarik</Text>
             </View>
             <View style={styles.buttonGroup}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  this.props.navigation.navigate('TransferScreen')
+                }>
                 <Icons
                   name="format-horizontal-align-right"
                   size={30}
@@ -313,16 +317,29 @@ export default class HomeScreen extends Component {
                       styles.riwayatBox,
                       {flexDirection: 'row', justifyContent: 'space-between'},
                     ]}
-                    onPress={() => this.detailPengajuan()}
-                    >
+                    onPress={() => this.detailPengajuan()}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                      <Icons
-                        name="arrow-bottom-left"
-                        size={30}
-                        color="#8388FF"
-                      />
+                      {value.type === 'Isi Saldo' ? (
+                        <Icons
+                          name="arrow-bottom-left"
+                          size={30}
+                          color="#8388FF"
+                        />
+                      ) : (
+                        <Icons
+                          name="arrow-top-right"
+                          size={30}
+                          color="#E31212"
+                        />
+                      )}
                       <View style={{marginLeft: 10}}>
-                        <Text style={styles.IDNumber}>Isi Saldo</Text>
+                        {value.type === 'Transfer Dana' ? (
+                          <Text style={styles.IDNumber}>
+                            {value.type} : ID {value.target}
+                          </Text>
+                        ) : (
+                          <Text style={styles.IDNumber}>{value.type}</Text>
+                        )}
                         <Text style={styles.dates}>
                           {value.created_at.substr(0, 10)}
                         </Text>
