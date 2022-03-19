@@ -69,7 +69,7 @@ export default class HomeScreen extends Component {
 
   getPengajuan() {
     // console.log('INI TOKEN', this.state.token);
-    fetch('https://aplikasi-santri.herokuapp.com/api/coba', {
+    fetch('https://aplikasi-santri.herokuapp.com/api/pengajuan', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.state.token}`,
@@ -311,6 +311,15 @@ export default class HomeScreen extends Component {
               <Text style={styles.succes}>Sukses</Text>
             </TouchableOpacity> */}
             {this.state.data.map((value, index) => {
+              const Status = () => {
+                if (value.status === 'Success') {
+                  return <Text style={styles.succes}>{value.status}</Text>;
+                } else if (value.status === 'Waiting') {
+                  return <Text style={styles.wait}>{value.status}</Text>;
+                } else if (value.status === 'Cancelled') {
+                  return <Text style={styles.canceled}>{value.status}</Text>;
+                }
+              };
               return (
                 <View key={index}>
                   <TouchableOpacity
@@ -349,11 +358,14 @@ export default class HomeScreen extends Component {
                         </Text>
                       </View>
                     </View>
-                    {value.status === 'Waiting' ? (
+                    {
+                      <Status />
+                      /* {value.status === 'Waiting' ? (
                       <Text style={styles.wait}>{value.status}</Text>
                     ) : (
                       <Text style={styles.succes}>{value.status}</Text>
-                    )}
+                    )} */
+                    }
                   </TouchableOpacity>
                 </View>
               );
@@ -480,6 +492,12 @@ const styles = StyleSheet.create({
   succes: {
     fontSize: 12,
     color: '#8388FF',
+    // fontWeight: 'bold',
+    fontFamily: 'Montserrat-SemiBold',
+  },
+  canceled: {
+    fontSize: 12,
+    color: '#E31212',
     // fontWeight: 'bold',
     fontFamily: 'Montserrat-SemiBold',
   },
