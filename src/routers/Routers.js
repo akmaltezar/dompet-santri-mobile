@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
 import SplashScreen from '../screens/splash';
 import LoginScreen from '../screens/login';
 import RegisterScreen from '../screens/RegisterScreen';
@@ -11,7 +9,7 @@ import IsiSaldoScreen from '../screens/IsiSaldoScreen';
 import TarikDanaScreen from '../screens/tarikdana';
 import ScannerScreen from '../screens/ScannerScreen';
 import DetailRiwayat from '../screens/DetailRiwayat';
-import TransferScreen from '../screens/TransferScreen'
+import TransferScreen from '../screens/TransferScreen';
 
 import Dashboard from './Dashboard';
 
@@ -45,6 +43,7 @@ export default class Routers extends Component {
             }}
           />
           <Stack.Screen name="DetailRiwayat" component={DetailRiwayat} />
+          <Stack.Screen name="TransferScreen" component={TransferScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
