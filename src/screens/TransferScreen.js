@@ -8,7 +8,7 @@ export default class TransferScren extends Component {
       <View>
         <View style={styles.kotak}>
           <TouchableOpacity style={styles.kotakin}>
-             <Image source={require('./src/assets/images/arlf.png')} />
+             <Image source={require('../assets/images/arlf.png')} />
              </TouchableOpacity>
             <Text style={[styles.kotakin , styles.text]}>Transfer Dana</Text>
         </View>
@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     elevation:5,
   },
   text:{
+    fontSize : 16,
     color:'white',
-    fontWeight:'bold'
+    fontFamily : 'Montserrat-Bold'
   }
 })

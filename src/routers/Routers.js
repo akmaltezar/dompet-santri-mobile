@@ -11,6 +11,7 @@ import IsiSaldoScreen from '../screens/IsiSaldoScreen';
 import TarikDanaScreen from '../screens/tarikdana';
 import ScannerScreen from '../screens/ScannerScreen';
 import DetailRiwayat from '../screens/DetailRiwayat';
+import TransferScreen from '../screens/TransferScreen'
 
 import Dashboard from './Dashboard';
 
@@ -28,6 +29,7 @@ export default class Routers extends Component {
           <Stack.Screen name="IsiSaldoScreen" component={IsiSaldoScreen} />
           <Stack.Screen name="TarikDanaScreen" component={TarikDanaScreen} />
           <Stack.Screen name="ScannerScreen" component={ScannerScreen} />
+          <Stack.Screen name="TransferScreen" component={TransferScreen}/>
           <Stack.Screen
             name="Dashboard"
             component={Dashboard}
