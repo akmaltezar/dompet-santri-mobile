@@ -11,6 +11,8 @@ import IsiSaldoScreen from '../screens/IsiSaldoScreen';
 import TarikDanaScreen from '../screens/tarikdana';
 import ScannerScreen from '../screens/ScannerScreen';
 import DetailRiwayat from '../screens/DetailRiwayat';
+import Pengajuan from '../screens/Pengajuan'
+
 import TransferScreen from '../screens/TransferScreen';
 
 import Dashboard from './Dashboard';
@@ -44,7 +46,11 @@ export default class Routers extends Component {
             }}
           />
           <Stack.Screen name="DetailRiwayat" component={DetailRiwayat} />
+
+          <Stack.Screen name="Pengajuan" component={Pengajuan} />
+
           <Stack.Screen name="TransferScreen" component={TransferScreen} />
+
         </Stack.Navigator>
       </NavigationContainer>
     );

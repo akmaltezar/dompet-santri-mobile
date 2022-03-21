@@ -5,10 +5,22 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  StyleSheet
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-  getRiwayat() {
+
+
+export default class Dashboard2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      token: '',
+    };
+  }
+
+    getRiwayat() {
     fetch('https://aplikasi-santri.herokuapp.com/api/historydashboard', {
       method: 'GET',
       redirect: 'follow',
@@ -24,15 +36,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
         }
       })
       .catch(error => console.log('error', error));
-  }
-
-export default class Dashboard2 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      token: '',
-    };
   }
 
   componentDidMount() {
