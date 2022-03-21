@@ -1,128 +1,156 @@
-import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import React, {Component} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class DashboardPengajuan extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      token: '',
+      data: [],
+      created_at: '',
+      status: '',
+    };
+  }
+  componentDidMount() {
+    AsyncStorage.getItem('token')
+      .then(value => {
+        if (value != null) {
+          this.setState({token: value});
+        } else {
+          this.props.navigation.replace('LoginScreen');
+        }
+      })
+      .then(() => this.getPengajuan())
+      .catch(err => {
+        console.log('tokennya', err);
+      });
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getPengajuan();
+    });
+  }
+
+  getPengajuan() {
+    console.log('INI TOKEN', this.state.token);
+    fetch('https://aplikasi-santri.herokuapp.com/api/coba', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('INI DATA', result.data);
+        this.setState({data: result.data});
+        // this.setState({
+        //   created_at: result.data[0].created_at,
+        //   status: result.data[0].status,
+        // });
+      })
+      .catch(error => console.log('ini error', error));
+  }
+
   render() {
-    const navigation = this.props.navigation;
     return (
       <View style={styles.container}>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            paddingVertical: 30,
-            width: '100%',
-            justifyContent: 'space-evenly',
-          }}>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Text
-              style={{
-                fontSize: 14,
-                fontFamily: 'Montserrat-SemiBold',
-                color: '#8388FF',
-                marginBottom: 15,
-              }}>
-              Pengajuan
-            </Text>
-            <View style={{height: 2, backgroundColor: '#8388FF', width: 100}} />
-          </View>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Text
-              style={{
-                fontSize: 14,
-                color: '#000',
-                marginBottom: 15,
-                fontFamily: 'Montserrat-Regular',
-              }}>
-              Riwayat
-            </Text>
-            <View style={{height: 2, backgroundColor: '#FFF', width: 100}} />
-          </View>
-        </View> */}
-        <View style={{alignItems: 'center', marginTop: 15}}>
-          <View
-            style={{
-              width: '90%',
-              backgroundColor: '#FFF',
-              elevation: 3,
-              height: 100,
-              borderRadius: 5,
-              paddingHorizontal: 30,
-              justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'space-between',
-              }}>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                }}>
+        <ScrollView>
+          <View style={{alignItems: 'center', marginTop: 15}}>
+            {this.state.data.map((value, index) => {
+              return (
                 <View
+                  key={index}
                   style={{
-                    height: 10,
-                    width: 10,
-                    backgroundColor: '#FFA216',
-                    borderRadius: 5,
-                    marginRight: 10,
+                    width: '90%',
+                    backgroundColor: '#FFF',
                     elevation: 3,
-                  }}
-                />
-                <View>
-                  <Text style={{fontFamily: 'Montserrat-SemiBold'}}>
-                    Isi Saldo
-                  </Text>
-                  <Text style={{fontFamily: 'Montserrat-Regular'}}>
-                    12/12/2021
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  width: 100,
-                  height: 25,
-                  backgroundColor: '#FFA216',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 5,
-                  elevation: 3,
-                }}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontFamily: 'Montserrat-SemiBold',
-                    color: '#FFF',
+                    height: 100,
+                    borderRadius: 5,
+                    paddingHorizontal: 30,
+                    marginBottom: 15,
+                    justifyContent: 'center',
                   }}>
-                  Menunggu
-                </Text>
-              </View>
-            </View>
-            <TouchableOpacity
-            onPress={()=>navigation.navigate('Pengajuan')}
-              style={{
-                backgroundColor: '#8388FF',
-                width: '100%',
-                height: 25,
-                borderRadius: 5,
-                elevation: 3,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: 12,
-              }}>
-              <Text
-                style={{
-                  fontSize: 12,
-                  fontFamily: 'Montserrat-SemiBold',
-                  color: '#FFF',
-                }}>
-                Lihat Data
-              </Text>
-            </TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: '100%',
+                      justifyContent: 'space-between',
+                    }}>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                      }}>
+                      <View
+                        style={{
+                          height: 10,
+                          width: 10,
+                          backgroundColor: '#FFA216',
+                          borderRadius: 5,
+                          marginRight: 10,
+                          elevation: 3,
+                        }}
+                      />
+                      <View>
+                        <Text style={{fontFamily: 'Montserrat-SemiBold'}}>
+                          Isi Saldo
+                        </Text>
+                        <Text style={{fontFamily: 'Montserrat-Regular'}}>
+                          {value.created_at.substr(0, 10)}
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        width: 100,
+                        height: 25,
+                        backgroundColor: '#FFA216',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 5,
+                        elevation: 3,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontFamily: 'Montserrat-SemiBold',
+                          color: '#FFF',
+                        }}>
+                        {value.status}
+                      </Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#8388FF',
+                      width: '100%',
+                      height: 25,
+                      borderRadius: 5,
+                      elevation: 3,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 12,
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontFamily: 'Montserrat-SemiBold',
+                        color: '#FFF',
+                      }}>
+                      Lihat Data
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
           </View>
-        </View>
+        </ScrollView>
       </View>
     );
   }

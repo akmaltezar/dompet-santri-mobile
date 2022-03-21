@@ -5,12 +5,15 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import SplashScreen from '../screens/splash';
 import LoginScreen from '../screens/login';
+import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
 import IsiSaldoScreen from '../screens/IsiSaldoScreen';
 import TarikDanaScreen from '../screens/tarikdana';
 import ScannerScreen from '../screens/ScannerScreen';
 import DetailRiwayat from '../screens/DetailRiwayat';
 import Pengajuan from '../screens/Pengajuan'
+
+import TransferScreen from '../screens/TransferScreen';
 
 import Dashboard from './Dashboard';
 
@@ -23,6 +26,7 @@ export default class Routers extends Component {
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="IsiSaldoScreen" component={IsiSaldoScreen} />
           <Stack.Screen name="TarikDanaScreen" component={TarikDanaScreen} />
@@ -42,7 +46,11 @@ export default class Routers extends Component {
             }}
           />
           <Stack.Screen name="DetailRiwayat" component={DetailRiwayat} />
+
           <Stack.Screen name="Pengajuan" component={Pengajuan} />
+
+          <Stack.Screen name="TransferScreen" component={TransferScreen} />
+
         </Stack.Navigator>
       </NavigationContainer>
     );
