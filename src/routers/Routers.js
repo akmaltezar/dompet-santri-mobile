@@ -14,6 +14,7 @@ import DetailRiwayat from '../screens/DetailRiwayat';
 import Pengajuan from '../screens/Pengajuan'
 
 import TransferScreen from '../screens/TransferScreen';
+import LihatPengajuan from '../screens/LihatPengajuan';
 
 import Dashboard from './Dashboard';
 
@@ -50,7 +51,7 @@ export default class Routers extends Component {
           <Stack.Screen name="Pengajuan" component={Pengajuan} />
 
           <Stack.Screen name="TransferScreen" component={TransferScreen} />
-
+          <Stack.Screen name="LihatPengajuan" component={LihatPengajuan} />
         </Stack.Navigator>
       </NavigationContainer>
     );
