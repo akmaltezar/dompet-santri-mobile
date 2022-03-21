@@ -67,7 +67,7 @@ export default class HomeScreen extends Component {
   }
 
   getPengajuan() {
-    // console.log('INI TOKEN', this.state.token);
+    console.log('INI TOKEN', this.state.token);
     fetch('https://aplikasi-santri.herokuapp.com/api/pengajuan', {
       method: 'GET',
       headers: {
@@ -95,17 +95,20 @@ export default class HomeScreen extends Component {
       },
     };
 
-    fetch(`https://aplikasi-santri.herokuapp.com/api/detail/${id}`, requestOptions)
+    fetch(
+      `https://aplikasi-santri.herokuapp.com/api/detail/${id}`,
+      requestOptions,
+    )
       .then(response => response.json())
       .then(result => {
-        console.log(result)
+        console.log(result);
         this.props.navigation.navigate('DetailRiwayat', {
           id: result.data.user_id,
           type: result.data.type,
           created_at: result.data.created_at,
           nominal: result.data.nominal,
           pict: result.data.pict,
-        })
+        });
       })
       .catch(error => console.log('error', error));
   }
@@ -207,7 +210,9 @@ export default class HomeScreen extends Component {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() =>
-                  this.props.navigation.navigate('TarikDanaScreen')
+                  this.props.navigation.navigate('TarikDanaScreen', {
+                    balance: this.state.balance,
+                  })
                 }>
                 <Icons
                   name="format-vertical-align-bottom"

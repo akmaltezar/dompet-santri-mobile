@@ -14,6 +14,7 @@ export default class DashboardPengajuan extends Component {
     this.state = {
       token: '',
       data: [],
+      type: '',
       created_at: '',
       status: '',
     };

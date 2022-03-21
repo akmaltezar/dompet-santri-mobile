@@ -72,7 +72,6 @@ export default class TransferScren extends Component {
       //     </TouchableOpacity>
       //     <Text style={[styles.kotakin, styles.text]}>Transfer Dana</Text>
       //   </View>
-
       //   <View style={styles.kotak2}>
       //     <TextInput style={styles.isiin} placeholder="ID Dompet Santri" />
       //     <TextInput style={styles.isiin} placeholder="Jumlah Transfer" />
@@ -102,7 +101,7 @@ export default class TransferScren extends Component {
               color: '#fff',
               marginLeft: 20,
             }}>
-            Tarik Dana
+            Transfer Dana
           </Text>
         </View>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -194,7 +193,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   text: {
+    fontSize: 16,
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
   },
 });

@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+  Alert,
+  ActivityIndicator,
   View,
   Text,
   Image,
@@ -7,12 +9,70 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default class Dana extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      token: '',
+      loading: false,
+      balance: 0,
+    };
+  }
+  componentDidMount() {
+    this.setState({
+      balance: this.props.route.params.balance,
+    });
+    AsyncStorage.getItem('token')
+      .then(value => {
+        if (value != null) {
+          this.setState({token: value});
+        } else {
+          this.props.navigation.navigate('HomeScreen');
+        }
+      })
+      .then(() => console.log(this.state.token))
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  tarikDana() {
+    this.setState({loading: true});
+    fetch('https://aplikasi-santri.herokuapp.com/api/tarik', {
+      method: 'POST',
+      headers: {Authorization: `Bearer ${this.state.token}`},
+      redirect: 'follow',
+    })
+      .then(response => response.json())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error))
+      .finally(() => {
+        this.setState({loading: false});
+        this.props.navigation.navigate('HomeScreen');
+      });
+  }
+
+  peringatanTarikDana = () =>
+    Alert.alert(
+      'Perhatian !',
+      'Anda yakin ingin menarik semua saldo yang ada di dompet anda ?',
+      [
+        {
+          text: 'Batal',
+        },
+        {
+          text: 'Ya',
+          onPress: () => this.tarikDana(),
+        },
+      ],
+    );
+
   render() {
     const navigation = this.props.navigation;
     return (
@@ -69,15 +129,28 @@ export default class Dana extends React.Component {
               justifyContent: 'center',
               alignItems: 'center',
               borderRadius: 5,
+            }}
+            onPress={() => {
+              if (this.state.balance === 0) {
+                Alert.alert('Perhatian !', 'Saldo anda Rp. 0,-', [
+                  {text: 'ok'},
+                ]);
+              } else {
+                this.peringatanTarikDana();
+              }
             }}>
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 16,
-                fontFamily: 'Montserrat-SemiBold',
-              }}>
-              Buat Pengajuan
-            </Text>
+            {this.state.loading ? (
+              <ActivityIndicator size={25} color="#FFF" />
+            ) : (
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 16,
+                  fontFamily: 'Montserrat-SemiBold',
+                }}>
+                Buat Pengajuan
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
