@@ -19,9 +19,9 @@ export default class HomeScreen extends Component {
       token: '',
       name: '',
       id: '',
-      type: '',
       balance: 0,
       data: [],
+      detail_id: '',
     };
   }
   componentDidMount() {
@@ -61,7 +61,7 @@ export default class HomeScreen extends Component {
           id: result.id,
           balance: result.balance,
         });
-        console.log(result);
+        // console.log(result);
       })
       .catch(error => console.log('error', error));
   }
@@ -112,6 +112,7 @@ export default class HomeScreen extends Component {
       })
       .catch(error => console.log('error', error));
   }
+
   logOut() {
     var requestOptions = {
       method: 'POST',
@@ -323,6 +324,15 @@ export default class HomeScreen extends Component {
               <Text style={styles.succes}>Sukses</Text>
             </TouchableOpacity> */}
             {this.state.data.map((value, index) => {
+              const Status = () => {
+                if (value.status === 'Success') {
+                  return <Text style={styles.succes}>{value.status}</Text>;
+                } else if (value.status === 'Waiting') {
+                  return <Text style={styles.wait}>{value.status}</Text>;
+                } else if (value.status === 'Cancelled') {
+                  return <Text style={styles.canceled}>{value.status}</Text>;
+                }
+              };
               return (
                 <View key={index}>
                   <TouchableOpacity
@@ -332,13 +342,27 @@ export default class HomeScreen extends Component {
                     ]}
                     onPress={() => this.detailPengajuan(value.id)}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                      <Icons
-                        name="arrow-bottom-left"
-                        size={30}
-                        color="#8388FF"
-                      />
+                      {value.type === 'Isi Saldo' ? (
+                        <Icons
+                          name="arrow-bottom-left"
+                          size={30}
+                          color="#8388FF"
+                        />
+                      ) : (
+                        <Icons
+                          name="arrow-top-right"
+                          size={30}
+                          color="#E31212"
+                        />
+                      )}
                       <View style={{marginLeft: 10}}>
-                        <Text style={styles.IDNumber}>{value.type}</Text>
+                        {value.type === 'Transfer Dana' ? (
+                          <Text style={styles.IDNumber}>
+                            {value.type} : ID {value.target}
+                          </Text>
+                        ) : (
+                          <Text style={styles.IDNumber}>{value.type}</Text>
+                        )}
                         <Text style={styles.dates}>
                           {value.created_at.substr(0, 10)}
                         </Text>
@@ -347,11 +371,14 @@ export default class HomeScreen extends Component {
                         </Text>
                       </View>
                     </View>
-                    {value.status === 'Waiting' ? (
+                    {
+                      <Status />
+                      /* {value.status === 'Waiting' ? (
                       <Text style={styles.wait}>{value.status}</Text>
                     ) : (
                       <Text style={styles.succes}>{value.status}</Text>
-                    )}
+                    )} */
+                    }
                   </TouchableOpacity>
                 </View>
               );
@@ -478,6 +505,12 @@ const styles = StyleSheet.create({
   succes: {
     fontSize: 12,
     color: '#8388FF',
+    // fontWeight: 'bold',
+    fontFamily: 'Montserrat-SemiBold',
+  },
+  canceled: {
+    fontSize: 12,
+    color: '#E31212',
     // fontWeight: 'bold',
     fontFamily: 'Montserrat-SemiBold',
   },
