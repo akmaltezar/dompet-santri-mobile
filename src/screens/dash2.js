@@ -27,15 +27,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
   //     .catch(error => console.log('error', error));
   // }
 
-export default class Dashboard2 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      token: '',
-    };
-  }
-
   componentDidMount() {
     AsyncStorage.getItem('token')
       .then(value => {
