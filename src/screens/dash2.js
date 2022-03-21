@@ -5,26 +5,27 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  StyleSheet
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-  getRiwayat() {
-    fetch('https://aplikasi-santri.herokuapp.com/api/historydashboard', {
-      method: 'GET',
-      redirect: 'follow',
-      headers: {
-        Authorization: `Bearer ${this.state.token}`,
-      },
-    })
-      .then(response => response.json())
-      .then(result => {
-        console.log(result);
-        this.setState({data: result.data});
-        if ((data.status = Cancelled)) {
-        }
-      })
-      .catch(error => console.log('error', error));
-  }
+  // getRiwayat() {
+  //   fetch('https://aplikasi-santri.herokuapp.com/api/historydashboard', {
+  //     method: 'GET',
+  //     redirect: 'follow',
+  //     headers: {
+  //       Authorization: `Bearer ${this.state.token}`,
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(result => {
+  //       console.log(result);
+  //       this.setState({data: result.data});
+  //       if ((data.status = Cancelled)) {
+  //       }
+  //     })
+  //     .catch(error => console.log('error', error));
+  // }
 
 export default class Dashboard2 extends React.Component {
   constructor(props) {

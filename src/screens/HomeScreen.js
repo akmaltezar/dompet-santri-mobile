@@ -86,7 +86,7 @@ export default class HomeScreen extends Component {
       .catch(error => console.log('itu error', error));
   }
 
-  detailPengajuan() {
+  detailPengajuan(id) {
     var requestOptions = {
       method: 'GET',
       redirect: 'follow',
@@ -95,9 +95,18 @@ export default class HomeScreen extends Component {
       },
     };
 
-    fetch('https://aplikasi-santri.herokuapp.com/api/detail/1', requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
+    fetch(`https://aplikasi-santri.herokuapp.com/api/detail/${id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result)
+        this.props.navigation.navigate('DetailRiwayat', {
+          id: result.data.user_id,
+          type: result.data.type,
+          created_at: result.data.created_at,
+          nominal: result.data.nominal,
+          pict: result.data.pict,
+        })
+      })
       .catch(error => console.log('error', error));
   }
 
@@ -326,7 +335,7 @@ export default class HomeScreen extends Component {
                       styles.riwayatBox,
                       {flexDirection: 'row', justifyContent: 'space-between'},
                     ]}
-                    onPress={() => this.detailPengajuan()}>
+                    onPress={() => this.detailPengajuan(value.id)}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       {value.type === 'Isi Saldo' ? (
                         <Icons

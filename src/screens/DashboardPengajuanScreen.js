@@ -56,6 +56,48 @@ export default class DashboardPengajuan extends Component {
       .catch(error => console.log('ini error', error));
   }
 
+  acceptPengajuan(id) {
+    var requestOptions = {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    };
+
+    fetch(
+      `https://aplikasi-santri.herokuapp.com/api/accept/${id}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+      })
+      .catch(error => console.log('error', error))
+      .finally(() => this.props.navigation.replace('HomeScreen'))
+  }
+  
+  cancelPengajuan(id) {
+    var requestOptions = {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    };
+
+    fetch(
+      `https://aplikasi-santri.herokuapp.com/api/cancel/${id}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+      })
+      .catch(error => console.log('error', error))
+      .finally(() => this.props.navigation.replace('HomeScreen'))
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -99,7 +141,7 @@ export default class DashboardPengajuan extends Component {
                       />
                       <View>
                         <Text style={{fontFamily: 'Montserrat-SemiBold'}}>
-                          Isi Saldo
+                          {value.type}
                         </Text>
                         <Text style={{fontFamily: 'Montserrat-Regular'}}>
                           {value.created_at.substr(0, 10)}
@@ -126,26 +168,50 @@ export default class DashboardPengajuan extends Component {
                       </Text>
                     </View>
                   </View>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: '#8388FF',
-                      width: '100%',
-                      height: 25,
-                      borderRadius: 5,
-                      elevation: 3,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginTop: 12,
-                    }}>
-                    <Text
+                  <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <TouchableOpacity
+                      onPress={() => this.acceptPengajuan(value.id)}
                       style={{
-                        fontSize: 12,
-                        fontFamily: 'Montserrat-SemiBold',
-                        color: '#FFF',
+                        backgroundColor: '#12E100',
+                        width: '45%',
+                        height: 25,
+                        borderRadius: 5,
+                        elevation: 3,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: 12,
                       }}>
-                      Lihat Data
-                    </Text>
-                  </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontFamily: 'Montserrat-SemiBold',
+                          color: '#FFF',
+                        }}>
+                        Terima Pengajuan
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => this.cancelPengajuan(value.id)}
+                      style={{
+                        backgroundColor: '#E31212',
+                        width: '45%',
+                        height: 25,
+                        borderRadius: 5,
+                        elevation: 3,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: 12,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontFamily: 'Montserrat-SemiBold',
+                          color: '#FFF',
+                        }}>
+                        Tolak Pengajuan
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               );
             })}
@@ -175,4 +241,3 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
   },
 });
-
