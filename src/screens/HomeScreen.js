@@ -86,6 +86,32 @@ export default class HomeScreen extends Component {
       .catch(error => console.log('itu error', error));
   }
 
+  detailPengajuan(id) {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    };
+
+    fetch(
+      `https://aplikasi-santri.herokuapp.com/api/detail/${id}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        this.props.navigation.navigate('DetailRiwayat', {
+          id: result.data.user_id,
+          type: result.data.type,
+          created_at: result.data.created_at,
+          nominal: result.data.nominal,
+          pict: result.data.pict,
+        });
+      })
+      .catch(error => console.log('error', error));
+  }
   logOut() {
     var requestOptions = {
       method: 'POST',
@@ -303,7 +329,8 @@ export default class HomeScreen extends Component {
                     style={[
                       styles.riwayatBox,
                       {flexDirection: 'row', justifyContent: 'space-between'},
-                    ]}>
+                    ]}
+                    onPress={() => this.detailPengajuan(value.id)}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Icons
                         name="arrow-bottom-left"

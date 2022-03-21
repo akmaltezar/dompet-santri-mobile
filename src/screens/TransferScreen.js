@@ -57,7 +57,10 @@ export default class TransferScren extends Component {
       .then(response => response.json())
       .then(result => console.log(result))
       .catch(error => console.log('error', error))
-      .finally(() => this.setState({loading: false}));
+      .finally(() => {
+        this.setState({loading: false})
+        this.props.navigation.navigate('HomeScreen')
+      });
   };
 
   render() {

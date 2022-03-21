@@ -85,6 +85,13 @@ export default class App extends Component {
       .finally(() => this.setState({loading: false}));
   };
 
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+
   render() {
     return (
       // <View style={{flex: 1, justifyContent: 'center', backgroundColor: '#FFF'}}>

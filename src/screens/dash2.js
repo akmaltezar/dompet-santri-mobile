@@ -36,15 +36,57 @@ export default class Dashboard2 extends Component {
       this.getRiwayat();
     });
   }
+  // getRiwayat() {
+  //   fetch('https://aplikasi-santri.herokuapp.com/api/historydashboard', {
+  //     method: 'GET',
+  //     redirect: 'follow',
+  //     headers: {
+  //       Authorization: `Bearer ${this.state.token}`,
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(result => {
+  //       console.log(result);
+  //       this.setState({data: result.data});
+  //       if ((data.status = Cancelled)) {
+  //       }
+  //     })
+  //     .catch(error => console.log('error', error));
+  // }
 
-  getRiwayat() {
-    fetch('https://aplikasi-santri.herokuapp.com/api/historydashboard', {
+  componentDidMount() {
+    AsyncStorage.getItem('token')
+      .then(value => {
+        if (value != null) {
+          this.setState({token: value});
+        } else {
+          this.props.navigation.replace('LoginScreen');
+        }
+      })
+      .then(() => {
+        this.getRiwayatPengajuan();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getRiwayatPengajuan();
+    });
+  }
+
+  getRiwayatPengajuan() {
+    var requestOptions = {
       method: 'GET',
       redirect: 'follow',
       headers: {
         Authorization: `Bearer ${this.state.token}`,
       },
-    })
+    };
+
+    fetch(
+      'https://aplikasi-santri.herokuapp.com/api/historydashboard',
+      requestOptions,
+    )
       .then(response => response.json())
       .then(result => {
         console.log(result);
