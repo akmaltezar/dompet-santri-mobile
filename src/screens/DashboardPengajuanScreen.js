@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 
 export default class DashboardPengajuan extends Component {
   render() {
+    const navigation = this.props.navigation;
     return (
       <View style={styles.container}>
         {/* <View
@@ -100,6 +101,7 @@ export default class DashboardPengajuan extends Component {
               </View>
             </View>
             <TouchableOpacity
+            onPress={()=>navigation.navigate('Pengajuan')}
               style={{
                 backgroundColor: '#8388FF',
                 width: '100%',
