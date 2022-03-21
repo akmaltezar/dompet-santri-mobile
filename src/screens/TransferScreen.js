@@ -62,15 +62,6 @@ export default class TransferScren extends Component {
 
   render() {
     return (
-<<<<<<< HEAD
-      <View>
-        <View style={styles.kotak}>
-          <TouchableOpacity style={styles.kotakin}>
-             <Image source={require('../assets/images/arlf.png')} />
-             </TouchableOpacity>
-            <Text style={[styles.kotakin , styles.text]}>Transfer Dana</Text>
-        </View>
-=======
       // <View>
       //   <View style={styles.kotak}>
       //     <TouchableOpacity style={styles.kotakin}>
@@ -78,8 +69,6 @@ export default class TransferScren extends Component {
       //     </TouchableOpacity>
       //     <Text style={[styles.kotakin, styles.text]}>Transfer Dana</Text>
       //   </View>
->>>>>>> 693efbfc16a998a50f8d58cb80dd3bfd4d0d06da
-
       //   <View style={styles.kotak2}>
       //     <TextInput style={styles.isiin} placeholder="ID Dompet Santri" />
       //     <TextInput style={styles.isiin} placeholder="Jumlah Transfer" />
@@ -109,7 +98,7 @@ export default class TransferScren extends Component {
               color: '#fff',
               marginLeft: 20,
             }}>
-            Tarik Dana
+            Transfer Dana
           </Text>
         </View>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -200,17 +189,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 5,
   },
-<<<<<<< HEAD
-  text:{
-    fontSize : 16,
-    color:'white',
-    fontFamily : 'Montserrat-Bold'
-  }
-})
-=======
   text: {
+    fontSize: 16,
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
   },
 });
->>>>>>> 693efbfc16a998a50f8d58cb80dd3bfd4d0d06da

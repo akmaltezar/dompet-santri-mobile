@@ -19,9 +19,9 @@ export default class HomeScreen extends Component {
       token: '',
       name: '',
       id: '',
+      type: '',
       balance: 0,
       data: [],
-      detail_id: '',
     };
   }
   componentDidMount() {
@@ -61,13 +61,13 @@ export default class HomeScreen extends Component {
           id: result.id,
           balance: result.balance,
         });
-        // console.log(result);
+        console.log(result);
       })
       .catch(error => console.log('error', error));
   }
 
   getPengajuan() {
-    // console.log('INI TOKEN', this.state.token);
+    console.log('INI TOKEN', this.state.token);
     fetch('https://aplikasi-santri.herokuapp.com/api/pengajuan', {
       method: 'GET',
       headers: {
@@ -84,21 +84,6 @@ export default class HomeScreen extends Component {
         // })
       })
       .catch(error => console.log('itu error', error));
-  }
-
-  detailPengajuan() {
-    var requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-      headers: {
-        Authorization: `Bearer ${this.state.token}`,
-      },
-    };
-
-    fetch('https://aplikasi-santri.herokuapp.com/api/detail/1', requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
   }
 
   logOut() {
@@ -198,7 +183,9 @@ export default class HomeScreen extends Component {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() =>
-                  this.props.navigation.navigate('TarikDanaScreen')
+                  this.props.navigation.navigate('TarikDanaScreen', {
+                    balance: this.state.balance,
+                  })
                 }>
                 <Icons
                   name="format-vertical-align-bottom"
@@ -310,45 +297,21 @@ export default class HomeScreen extends Component {
               <Text style={styles.succes}>Sukses</Text>
             </TouchableOpacity> */}
             {this.state.data.map((value, index) => {
-              const Status = () => {
-                if (value.status === 'Success') {
-                  return <Text style={styles.succes}>{value.status}</Text>;
-                } else if (value.status === 'Waiting') {
-                  return <Text style={styles.wait}>{value.status}</Text>;
-                } else if (value.status === 'Cancelled') {
-                  return <Text style={styles.canceled}>{value.status}</Text>;
-                }
-              };
               return (
                 <View key={index}>
                   <TouchableOpacity
                     style={[
                       styles.riwayatBox,
                       {flexDirection: 'row', justifyContent: 'space-between'},
-                    ]}
-                    onPress={() => this.detailPengajuan()}>
+                    ]}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                      {value.type === 'Isi Saldo' ? (
-                        <Icons
-                          name="arrow-bottom-left"
-                          size={30}
-                          color="#8388FF"
-                        />
-                      ) : (
-                        <Icons
-                          name="arrow-top-right"
-                          size={30}
-                          color="#E31212"
-                        />
-                      )}
+                      <Icons
+                        name="arrow-bottom-left"
+                        size={30}
+                        color="#8388FF"
+                      />
                       <View style={{marginLeft: 10}}>
-                        {value.type === 'Transfer Dana' ? (
-                          <Text style={styles.IDNumber}>
-                            {value.type} : ID {value.target}
-                          </Text>
-                        ) : (
-                          <Text style={styles.IDNumber}>{value.type}</Text>
-                        )}
+                        <Text style={styles.IDNumber}>{value.type}</Text>
                         <Text style={styles.dates}>
                           {value.created_at.substr(0, 10)}
                         </Text>
@@ -357,14 +320,11 @@ export default class HomeScreen extends Component {
                         </Text>
                       </View>
                     </View>
-                    {
-                      <Status />
-                      /* {value.status === 'Waiting' ? (
+                    {value.status === 'Waiting' ? (
                       <Text style={styles.wait}>{value.status}</Text>
                     ) : (
                       <Text style={styles.succes}>{value.status}</Text>
-                    )} */
-                    }
+                    )}
                   </TouchableOpacity>
                 </View>
               );
@@ -491,12 +451,6 @@ const styles = StyleSheet.create({
   succes: {
     fontSize: 12,
     color: '#8388FF',
-    // fontWeight: 'bold',
-    fontFamily: 'Montserrat-SemiBold',
-  },
-  canceled: {
-    fontSize: 12,
-    color: '#E31212',
     // fontWeight: 'bold',
     fontFamily: 'Montserrat-SemiBold',
   },

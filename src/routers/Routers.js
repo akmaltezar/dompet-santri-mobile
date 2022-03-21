@@ -26,8 +26,8 @@ export default class Routers extends Component {
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="IsiSaldoScreen" component={IsiSaldoScreen} />
           <Stack.Screen name="TarikDanaScreen" component={TarikDanaScreen} />
+          <Stack.Screen name="TransferScreen" component={TransferScreen} />
           <Stack.Screen name="ScannerScreen" component={ScannerScreen} />
-          <Stack.Screen name="TransferScreen" component={TransferScreen}/>
           <Stack.Screen
             name="Dashboard"
             component={Dashboard}
@@ -43,7 +43,7 @@ export default class Routers extends Component {
             }}
           />
           <Stack.Screen name="DetailRiwayat" component={DetailRiwayat} />
-          <Stack.Screen name="TransferScreen" component={TransferScreen} />
+          
         </Stack.Navigator>
       </NavigationContainer>
     );

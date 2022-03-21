@@ -14,6 +14,7 @@ export default class DashboardPengajuan extends Component {
     this.state = {
       token: '',
       data: [],
+      type: '',
       created_at: '',
       status: '',
     };
@@ -99,7 +100,7 @@ export default class DashboardPengajuan extends Component {
                       />
                       <View>
                         <Text style={{fontFamily: 'Montserrat-SemiBold'}}>
-                          Isi Saldo
+                          {value.type}
                         </Text>
                         <Text style={{fontFamily: 'Montserrat-Regular'}}>
                           {value.created_at.substr(0, 10)}
@@ -175,4 +176,3 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
   },
 });
-
