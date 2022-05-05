@@ -14,9 +14,9 @@ export default class DashboardPengajuan extends Component {
     this.state = {
       token: '',
       data: [],
-      type: '',
       created_at: '',
       status: '',
+      roles: '',
     };
   }
   componentDidMount() {
@@ -35,11 +35,12 @@ export default class DashboardPengajuan extends Component {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.getPengajuan();
     });
+    console.log(this.state.roles);
   }
 
   getPengajuan() {
     console.log('INI TOKEN', this.state.token);
-    fetch('https://aplikasi-santri.herokuapp.com/api/coba', {
+    fetch('https://aplikasi-santri.herokuapp.com/api/admin', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.state.token}`,
@@ -49,17 +50,16 @@ export default class DashboardPengajuan extends Component {
       .then(result => {
         console.log('INI DATA', result.data);
         this.setState({data: result.data});
-        // this.setState({
-        //   created_at: result.data[0].created_at,
-        //   status: result.data[0].status,
-        // });
+        // this.setState
+        // ({created_at : result.data[0].created_at,
+        //   status : result.data[0].status
+        // })
       })
       .catch(error => console.log('ini error', error));
   }
-
-  acceptPengajuan(id) {
-    var requestOptions = {
-      method: 'POST',
+  detailPengajuan(id) {
+    let requestOptions = {
+      method: 'GET',
       redirect: 'follow',
       headers: {
         Authorization: `Bearer ${this.state.token}`,
@@ -67,39 +67,27 @@ export default class DashboardPengajuan extends Component {
     };
 
     fetch(
-      `https://aplikasi-santri.herokuapp.com/api/accept/${id}`,
+      `https://aplikasi-santri.herokuapp.com/api/detail/${id}`,
       requestOptions,
     )
       .then(response => response.json())
       .then(result => {
         console.log(result);
+        this.props.navigation.navigate('Detail Pengajuan', {
+          id: result.data.id,
+          type: result.data.type,
+          created_at: result.data.created_at,
+          nominal: result.data.nominal,
+          pict: result.data.pict,
+          status: result.data.status,
+          username: result.data.user.substr(16, 14),
+        });
       })
-      .catch(error => console.log('error', error))
-      .finally(() => this.props.navigation.replace('HomeScreen'))
-  }
-  
-  cancelPengajuan(id) {
-    var requestOptions = {
-      method: 'POST',
-      redirect: 'follow',
-      headers: {
-        Authorization: `Bearer ${this.state.token}`,
-      },
-    };
-
-    fetch(
-      `https://aplikasi-santri.herokuapp.com/api/cancel/${id}`,
-      requestOptions,
-    )
-      .then(response => response.json())
-      .then(result => {
-        console.log(result);
-      })
-      .catch(error => console.log('error', error))
-      .finally(() => this.props.navigation.replace('HomeScreen'))
+      .catch(error => console.log('error', error));
   }
 
   render() {
+    console.log(this.state.roles);
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -169,50 +157,27 @@ export default class DashboardPengajuan extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity
-                      onPress={() => this.acceptPengajuan(value.id)}
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#8388FF',
+                      width: '100%',
+                      height: 25,
+                      borderRadius: 5,
+                      elevation: 3,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 12,
+                    }}
+                    onPress={() => this.detailPengajuan(value.id)}>
+                    <Text
                       style={{
-                        backgroundColor: '#12E100',
-                        width: '45%',
-                        height: 25,
-                        borderRadius: 5,
-                        elevation: 3,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 12,
+                        fontSize: 12,
+                        fontFamily: 'Montserrat-SemiBold',
+                        color: '#FFF',
                       }}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          fontFamily: 'Montserrat-SemiBold',
-                          color: '#FFF',
-                        }}>
-                        Terima Pengajuan
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => this.cancelPengajuan(value.id)}
-                      style={{
-                        backgroundColor: '#E31212',
-                        width: '45%',
-                        height: 25,
-                        borderRadius: 5,
-                        elevation: 3,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 12,
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          fontFamily: 'Montserrat-SemiBold',
-                          color: '#FFF',
-                        }}>
-                        Tolak Pengajuan
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                      Lihat Data
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               );
             })}
