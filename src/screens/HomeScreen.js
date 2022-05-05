@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   Alert,
+  PermissionsAndroid,
 } from 'react-native';
 import React, {Component} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,13 +19,18 @@ export default class HomeScreen extends Component {
       data: '',
       token: '',
       name: '',
-      id: '',
+      user_id: '',
       balance: 0,
+      roles: '',
       data: [],
-      detail_id: '',
+      uriPhoto: null,
+      loading: false,
     };
   }
   componentDidMount() {
+    AsyncStorage.getItem('Image').then(respon =>
+      this.setState({uriPhoto: respon}),
+    );
     AsyncStorage.getItem('token')
       .then(value => {
         if (value != null) {
@@ -35,16 +41,52 @@ export default class HomeScreen extends Component {
       })
       .then(() => {
         this.userData();
-        this.getPengajuan();
+      })
+      .then(() => {
+        this.getTransaksi();
+      })
+      .then(() => {
+        this.unsubscribe();
       })
       .catch(err => {
         console.log(err);
       });
-    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+  }
+  componentWillUnmount() {
+    unsubscribe = this.props.navigation.addListener('focus', () => {
       this.userData();
-      this.getPengajuan();
+      this.getTransaksi();
     });
   }
+
+  requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Dompet Santri Camera Permission',
+          message: 'This app needs access to your camera',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.props.navigation.navigate('ScannerScreen', {
+          balance: this.state.balance,
+        });
+        console.log('Camera permission given');
+      } else {
+        ToastAndroid.show(
+          'Go to App Info to allow the permission',
+          ToastAndroid.SHORT,
+        );
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   userData() {
     fetch('https://aplikasi-santri.herokuapp.com/api/user', {
@@ -58,36 +100,35 @@ export default class HomeScreen extends Component {
       .then(result => {
         this.setState({
           name: result.name,
-          id: result.id,
+          user_id: result.id,
           balance: result.balance,
+          roles: result.roles,
         });
-        // console.log(result);
+        console.log(result);
       })
-      .catch(error => console.log('error', error));
+      .catch(error => console.log('user error', error));
   }
 
-  getPengajuan() {
-    console.log('INI TOKEN', this.state.token);
-    fetch('https://aplikasi-santri.herokuapp.com/api/pengajuan', {
+  getTransaksi() {
+    const requestOptions = {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.state.token}`,
       },
-    })
+    };
+    fetch('https://aplikasi-santri.herokuapp.com/api/pengajuan', requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('INI DATA', result.data);
-        this.setState({data: result.data});
-        // this.setState
-        // ({created_at : result.data[0].created_at,
-        //   status : result.data[0].status
-        // })
+        this.setState({
+          data: result.data,
+        });
       })
-      .catch(error => console.log('itu error', error));
+      .catch(error => console.log('admintransaksi error', error));
   }
 
-  detailPengajuan(id) {
-    var requestOptions = {
+  detailTransaksi(id) {
+    let requestOptions = {
       method: 'GET',
       redirect: 'follow',
       headers: {
@@ -102,15 +143,29 @@ export default class HomeScreen extends Component {
       .then(response => response.json())
       .then(result => {
         console.log(result);
-        this.props.navigation.navigate('DetailRiwayat', {
-          id: result.data.user_id,
-          type: result.data.type,
-          created_at: result.data.created_at,
-          nominal: result.data.nominal,
-          pict: result.data.pict,
-        });
+        if (result.data.status === 'Waiting') {
+          this.props.navigation.navigate('Detail Pengajuan', {
+            id: result.data.id,
+            type: result.data.type,
+            created_at: result.data.created_at,
+            nominal: result.data.nominal,
+            pict: result.data.pict,
+            status: result.data.status,
+            username: result.data.user.substr(16, 14),
+          });
+        } else {
+          this.props.navigation.navigate('DetailRiwayat', {
+            id: result.data.id,
+            type: result.data.type,
+            created_at: result.data.created_at,
+            nominal: result.data.nominal,
+            pict: result.data.pict,
+            status: result.data.status,
+            username: result.data.user.substr(16, 14),
+          });
+        }
       })
-      .catch(error => console.log('error', error));
+      .catch(error => console.log('detail error', error));
   }
 
   logOut() {
@@ -123,7 +178,7 @@ export default class HomeScreen extends Component {
     };
 
     fetch('https://aplikasi-santri.herokuapp.com/api/logout', requestOptions)
-      .then(response => response.text())
+      .then(response => response.json())
       .then(result => {
         console.log(result);
         AsyncStorage.clear();
@@ -144,14 +199,6 @@ export default class HomeScreen extends Component {
       },
     ]);
 
-  componentWillUnmount() {
-    // fix Warning: Can't perform a React state update on an unmounted component
-    this.setState = (state, callback) => {
-      return;
-    };
-    this.unsubscribe();
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -160,21 +207,38 @@ export default class HomeScreen extends Component {
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <View>
-                <Text style={styles.profileText}>{this.state.name}</Text>
-                <Text style={styles.profileText}>ID {this.state.id}</Text>
+                <Text style={styles.profileText}>Hai, {this.state.name}</Text>
+                <Text style={styles.profileText}>ID {this.state.user_id}</Text>
               </View>
-              <View
-                style={{
-                  width: 55,
-                  height: 55,
-                  backgroundColor: '#FFF',
-                  borderRadius: 55,
-                }}>
-                <Image
-                  source={require('../assets/images/profilePicture.png')}
-                  style={{width: 55, height: 55}}
-                />
-              </View>
+              {this.state.roles === 'customer' ? (
+                <TouchableOpacity
+                  style={{
+                    width: 55,
+                    height: 55,
+                    backgroundColor: '#8388FF',
+                    borderRadius: 55,
+                  }}
+                  onPress={() =>
+                    this.props.navigation.navigate('Profile', {
+                      name: this.state.name,
+                      id: this.state.id,
+                    })
+                  }>
+                  {this.state.uriPhoto !== null ? (
+                    <Image
+                      source={{uri: this.state.uriPhoto}}
+                      style={styles.image}
+                    />
+                  ) : (
+                    <Image
+                      source={require('../assets/images/profile.png')}
+                      style={{width: '100%', height: '100%'}}
+                    />
+                  )}
+                </TouchableOpacity>
+              ) : (
+                <View></View>
+              )}
             </View>
             <View style={styles.saldoBox}>
               <Text style={styles.saldoText}>Saldo</Text>
@@ -187,7 +251,7 @@ export default class HomeScreen extends Component {
             <View style={styles.buttonGroup}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => this.props.navigation.navigate('ScannerScreen')}>
+                onPress={() => this.requestCameraPermission()}>
                 <Icons name="line-scan" size={30} color="#000" />
               </TouchableOpacity>
               <Text style={styles.textButton}>Bayar</Text>
@@ -226,7 +290,9 @@ export default class HomeScreen extends Component {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() =>
-                  this.props.navigation.navigate('TransferScreen')
+                  this.props.navigation.navigate('TransferScreen', {
+                    balance: this.state.balance,
+                  })
                 }>
                 <Icons
                   name="format-horizontal-align-right"
@@ -258,71 +324,16 @@ export default class HomeScreen extends Component {
           </View>
           <View style={styles.riwayatTransaksi}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.replace('Dashboard')}
+              onPress={() => {
+                this.state.roles === 'finance'
+                  ? this.props.navigation.navigate('Dashboard')
+                  : this.props.navigation.navigate('Riwayat Transaksi');
+              }}
               style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icons name="format-list-bulleted" size={30} color="#8388FF" />
+
               <Text style={styles.textRiwayatTransaksi}>Riwayat Transaksi</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
-              style={[
-                styles.riwayatBox,
-                {flexDirection: 'row', justifyContent: 'space-between'},
-              ]}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icons name="arrow-bottom-left" size={30} color="#8388FF" />
-                <View style={{marginLeft: 10}}>
-                  <Text style={styles.IDNumber}>Bayar : ID 001100011100</Text>
-                  <Text style={styles.dates}>08-12-2020</Text>
-                  <Text style={styles.priceIsi}>RP 1.000.000,00</Text>
-                </View>
-              </View>
-              <Text style={styles.wait}></Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.riwayatBox,
-                {flexDirection: 'row', justifyContent: 'space-between'},
-              ]}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icons name="arrow-bottom-left" size={30} color="#8388FF" />
-                <View style={{marginLeft: 10}}>
-                  <Text style={styles.IDNumber}>Isi Saldo</Text>
-                  <Text style={styles.dates}>08-12-2020</Text>
-                  <Text style={styles.priceIsi}>RP 1.000.000,00</Text>
-                </View>
-              </View>
-              <Text style={styles.wait}>Menunggu</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.riwayatBox,
-                {flexDirection: 'row', justifyContent: 'space-between'},
-              ]}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icons name="arrow-top-right" size={30} color="#E31212" />
-                <View style={{marginLeft: 10}}>
-                  <Text style={styles.IDNumber}>Isi Saldo</Text>
-                  <Text style={styles.dates}>08-12-2020</Text>
-                  <Text style={styles.priceTarik}>RP 1.000.000,00</Text>
-                </View>
-              </View>
-              <Text style={styles.succes}></Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.riwayatBox,
-                {flexDirection: 'row', justifyContent: 'space-between'},
-              ]}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icons name="arrow-top-right" size={30} color="#E31212" />
-                <View style={{marginLeft: 10}}>
-                  <Text style={styles.IDNumber}>Isi Saldo</Text>
-                  <Text style={styles.dates}>08-12-2020</Text>
-                  <Text style={styles.priceTarik}>RP 1.000.000,00</Text>
-                </View>
-              </View>
-              <Text style={styles.succes}>Sukses</Text>
-            </TouchableOpacity> */}
             {this.state.data.map((value, index) => {
               const Status = () => {
                 if (value.status === 'Success') {
@@ -340,7 +351,7 @@ export default class HomeScreen extends Component {
                       styles.riwayatBox,
                       {flexDirection: 'row', justifyContent: 'space-between'},
                     ]}
-                    onPress={() => this.detailPengajuan(value.id)}>
+                    onPress={() => this.detailTransaksi(value.id)}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       {value.type === 'Isi Saldo' ? (
                         <Icons
@@ -371,14 +382,7 @@ export default class HomeScreen extends Component {
                         </Text>
                       </View>
                     </View>
-                    {
-                      <Status />
-                      /* {value.status === 'Waiting' ? (
-                      <Text style={styles.wait}>{value.status}</Text>
-                    ) : (
-                      <Text style={styles.succes}>{value.status}</Text>
-                    )} */
-                    }
+                    {<Status />}
                   </TouchableOpacity>
                 </View>
               );
@@ -406,6 +410,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     color: '#FFF',
     // fontWeight: 'bold',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 99,
   },
   saldoBox: {
     justifyContent: 'center',
