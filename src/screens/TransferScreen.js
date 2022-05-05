@@ -4,14 +4,21 @@ import {
   StyleSheet,
   View,
   Image,
+  ScrollView,
+  Alert,
   TextInput,
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RNCamera} from 'react-native-camera';
+import QRCodeScanner from 'react-native-qrcode-scanner';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -20,14 +27,27 @@ export default class TransferScren extends Component {
   constructor() {
     super();
     this.state = {
+      balance: '',
       target: '',
+      name: '',
       nominal: '',
       token: '',
       loading: false,
     };
   }
 
+  onSuccess = data => {
+    JSON.parse(data);
+    this.setState({
+      target: data.id,
+      name: data.name,
+    });
+  };
+
   componentDidMount() {
+    this.setState({
+      balance: this.props.route.params.balance,
+    });
     AsyncStorage.getItem('token').then(value => {
       if (value != null) {
         this.setState({token: value});
@@ -40,11 +60,11 @@ export default class TransferScren extends Component {
   transfer = () => {
     this.setState({loading: true});
 
-    var formdata = new FormData();
+    let formdata = new FormData();
     formdata.append('target', this.state.target);
     formdata.append('nominal', this.state.nominal);
 
-    var requestOptions = {
+    let requestOptions = {
       method: 'POST',
       body: formdata,
       redirect: 'follow',
@@ -55,146 +75,228 @@ export default class TransferScren extends Component {
 
     fetch('https://aplikasi-santri.herokuapp.com/api/transfer', requestOptions)
       .then(response => response.json())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error))
-      .finally(() => {
-        this.setState({loading: false})
-        this.props.navigation.navigate('HomeScreen')
-      });
+      .then(result => {
+        console.log(result);
+        if (result.code === 422) {
+          Alert.alert(
+            'Perhatian !',
+            'Pastikan anda mengisi data transfer dengan benar !',
+            [{text: 'ok'}],
+          );
+        } else {
+          this.props.navigation.goBack();
+        }
+      })
+      .catch(error => console.log('error', error));
+    // .finally(() => {
+    //   this.setState({loading: false});
+    //   this.props.navigation.goBack()
+    // });
   };
+  peringatanTransferSaldo = () =>
+    Alert.alert(
+      'Perhatian !',
+      `Anda yakin ingin mentransfer saldo sebesar ${this.state.nominal} ?`,
+      [
+        {
+          text: 'Batal',
+        },
+        {
+          text: 'Ya',
+          onPress: () => this.transfer(),
+        },
+      ],
+    );
 
   render() {
     return (
-      // <View>
-      //   <View style={styles.kotak}>
-      //     <TouchableOpacity style={styles.kotakin}>
-      //       {/* <Image source={require('./src/assets/images/arlf.png')} /> */}
-      //     </TouchableOpacity>
-      //     <Text style={[styles.kotakin, styles.text]}>Transfer Dana</Text>
-      //   </View>
-      //   <View style={styles.kotak2}>
-      //     <TextInput style={styles.isiin} placeholder="ID Dompet Santri" />
-      //     <TextInput style={styles.isiin} placeholder="Jumlah Transfer" />
-      //     <TouchableOpacity style={styles.ktf}>
-      //       <Text style={styles.text}>Transfer</Text>
-      //     </TouchableOpacity>
-      //   </View>
-      // </View>
-      <View style={{alignItems: 'center', flex: 1, backgroundColor: 'white'}}>
-        <View
-          style={{
-            backgroundColor: '#8388FF',
-            height: screenHeight * 0.08,
-            width: screenWidth * 1,
-            paddingHorizontal: 25,
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-            <Icon name="arrow-left" size={20} color="#fff" />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontFamily: 'Montserrat-SemiBold',
-              fontSize: 18,
-              color: '#fff',
-              marginLeft: 20,
-            }}>
-            Transfer Dana
-          </Text>
-        </View>
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <TextInput
-            style={{
-              borderWidth: 1,
-              width: screenWidth - 80,
-              borderRadius: 5,
-              paddingLeft: 20,
-              marginBottom: 10,
-            }}
-            placeholder="ID Dompet Santri"
-            onChangeText={target => this.setState({target})}
-            keyboardType={'number-pad'}
-          />
-          <TextInput
-            style={{
-              borderWidth: 1,
-              width: screenWidth - 80,
-              borderRadius: 5,
-              paddingLeft: 20,
-              marginBottom: 20,
-            }}
-            placeholder="Jumlah Transfer"
-            onChangeText={nominal => this.setState({nominal})}
-            keyboardType={'number-pad'}
-          />
-          <TouchableOpacity
-            onPress={() => this.transfer()}
-            style={{
-              backgroundColor: '#8388FF',
-              width: screenWidth - 80,
-              height: 40,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 5,
-            }}>
-            {this.state.loading ? (
-              <ActivityIndicator size={25} color="#FFF" />
-            ) : (
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 16,
-                  fontFamily: 'Montserrat-SemiBold',
-                }}>
-                Transfer
-              </Text>
-            )}
-          </TouchableOpacity>
-        </View>
+      <View style={styles.container}>
+        <QRCodeScanner
+          onRead={this.onSuccess}
+          showMarker={true}
+          flashMode={RNCamera.Constants.FlashMode.auto}
+          bottomContent={
+            <>
+              <View style={styles.bottomContent}>
+                <View style={styles.header}>
+                  <Text style={styles.title}>Transfer Saldo</Text>
+                </View>
+                <View style={styles.inputView}>
+                  <TextInput
+                    onChangeText={nominal => this.setState({nominal})}
+                    style={styles.input}
+                    placeholder="Silahkan Isi Nominal yang akan ditransfer"
+                    keyboardType="number-pad"></TextInput>
+                </View>
+                <View>
+                  <View style={styles.detailView}>
+                    <View style={styles.dataView}>
+                      <Text style={styles.data}>ID Dompet Santri Penerima</Text>
+                      <Text style={styles.data}>Nama Santri</Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                      }}>
+                      <Text style={{marginBottom: 5}}>:</Text>
+                      <Text style={{marginBottom: 5}}>:</Text>
+                    </View>
+                    <View style={styles.valueView}>
+                      <Text style={styles.value}>{this.state.target}</Text>
+                      <Text style={styles.value}>{this.state.name}</Text>
+                    </View>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.buyButton}
+                    onPress={() => {
+                      if (this.state.balance === 0) {
+                        Alert.alert('Perhatian !', 'Saldo anda Rp. 0,-', [
+                          {text: 'ok'},
+                        ]);
+                      } else if (this.state.target && this.state.name) {
+                        Alert.alert(
+                          'Perhatian !',
+                          'Silahkan scan ID Santri dahulu',
+                          [{text: 'ok'}],
+                        );
+                      } else if (this.state.nominal === null) {
+                        Alert.alert(
+                          'Perhatian !',
+                          'Masukkan nominal saldo yang akan anda transfer !',
+                          [{text: 'ok'}],
+                        );
+                      } else if (this.state.nominal > this.state.balance) {
+                        Alert.alert(
+                          'Perhatian !',
+                          'Saldo yang anda miliki tidak cukup untuk ditransfer !',
+                          [{text: 'ok'}],
+                        );
+                      } else {
+                        this.peringatanTransferSaldo();
+                      }
+                    }}>
+                    <Text style={styles.buyText}>Transfer</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={() => this.props.navigation.goBack()}>
+                    <Text style={styles.buyText}>Batal</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </>
+          }
+        />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  kotak: {
-    height: 50,
-    width: 540,
-    backgroundColor: '#8388FF',
-    flexDirection: 'row',
+  container: {
+    height: hp('60%'),
+    width: wp('100%'),
   },
-  kotakin: {
-    marginTop: 12,
-    marginLeft: 8,
-    fontSize: 20,
-  },
-  kotak2: {
+  bottomContent: {
+    flex: 1,
+    flexDirection: 'column',
     alignItems: 'center',
-    marginTop: 150,
   },
-  isiin: {
-    height: 40,
-    width: 200,
-    borderWidth: 2,
-    borderColor: '#F1F1F1',
-    marginBottom: 10,
-    borderRadius: 5,
-    paddingLeft: 10,
-  },
-  ktf: {
-    height: 50,
-    width: 200,
+  header: {
     backgroundColor: '#8388FF',
+    height: hp('7.5%'),
+    width: wp('100%'),
+    top: '5%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
-    elevation: 5,
+    flexDirection: 'row',
   },
-  text: {
-    fontSize: 16,
-    color: 'white',
-    fontFamily: 'Montserrat-Bold',
+  title: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 18,
+    color: '#fff',
+    marginLeft: 20,
+  },
+  detailView: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: wp('90%'),
+    height: hp('10%'),
+
+    borderRadius: 10,
+    borderBottomWidth: 1,
+    borderColor: '#C4C4C4',
+    borderTopWidth: 0.4,
+    borderLeftWidth: 0.4,
+    borderRightWidth: 0.4,
+  },
+  dataView: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: wp('50%'),
+    height: hp('10%'),
+  },
+  data: {
+    color: '#000',
+    fontSize: 15,
+    marginBottom: '2%',
+    fontFamily: 'Montserrat-Regular',
+  },
+  valueView: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: wp('30%'),
+    height: hp('10%'),
+  },
+  value: {
+    color: '#000',
+    fontSize: 15,
+    marginBottom: '2%',
+    fontFamily: 'Montserrat-SemiBold',
+  },
+  buyButton: {
+    backgroundColor: '#12E100',
+    width: wp('90%'),
+    height: hp('5%'),
+    marginVertical: '3%',
+    borderRadius: 5,
+    elevation: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buyText: {
+    fontSize: 14,
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#FFF',
+  },
+  cancelButton: {
+    backgroundColor: '#E31212',
+    width: wp('90%'),
+    height: hp('5%'),
+    borderRadius: 5,
+    elevation: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputView: {
+    alignItems: 'center',
+    width: wp('90%'),
+    height: hp('6%'),
+    marginTop: '7%',
+    marginBottom: '3%',
+    borderRadius: 10,
+    borderBottomWidth: 1,
+    borderColor: '#C4C4C4',
+    borderTopWidth: 0.4,
+    borderLeftWidth: 0.4,
+    borderRightWidth: 0.4,
+  },
+  input: {
+    width: wp('85%'),
   },
 });
