@@ -16,13 +16,9 @@ export default class Dashboard2 extends Component {
       type: '',
       created_at: '',
       status: '',
-      roles: '',
     };
   }
   componentDidMount() {
-    // this.setState({
-    //   roles: this.props.route.params.roles,
-    // });
     AsyncStorage.getItem('token')
       .then(value => {
         if (value != null) {
