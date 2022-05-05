@@ -16,45 +16,13 @@ export default class Dashboard2 extends Component {
       type: '',
       created_at: '',
       status: '',
+      roles: '',
     };
   }
-
   componentDidMount() {
-    AsyncStorage.getItem('token')
-      .then(value => {
-        if (value != null) {
-          this.setState({token: value});
-        } else {
-          this.props.navigation.replace('LoginScreen');
-        }
-      })
-      .then(() => this.getRiwayat())
-      .catch(err => {
-        console.log('tokennya', err);
-      });
-    this.unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.getRiwayat();
-    });
-  }
-  // getRiwayat() {
-  //   fetch('https://aplikasi-santri.herokuapp.com/api/historydashboard', {
-  //     method: 'GET',
-  //     redirect: 'follow',
-  //     headers: {
-  //       Authorization: `Bearer ${this.state.token}`,
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(result => {
-  //       console.log(result);
-  //       this.setState({data: result.data});
-  //       if ((data.status = Cancelled)) {
-  //       }
-  //     })
-  //     .catch(error => console.log('error', error));
-  // }
-
-  componentDidMount() {
+    // this.setState({
+    //   roles: this.props.route.params.roles,
+    // });
     AsyncStorage.getItem('token')
       .then(value => {
         if (value != null) {
@@ -66,12 +34,7 @@ export default class Dashboard2 extends Component {
       .then(() => {
         this.getRiwayatPengajuan();
       })
-      .catch(err => {
-        console.log(err);
-      });
-    this.unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.getRiwayatPengajuan();
-    });
+      .catch(err => console.log(err));
   }
 
   getRiwayatPengajuan() {
@@ -84,13 +47,40 @@ export default class Dashboard2 extends Component {
     };
 
     fetch(
-      'https://aplikasi-santri.herokuapp.com/api/historydashboard',
+      'https://aplikasi-santri.herokuapp.com/api/riwayatadmin',
       requestOptions,
     )
       .then(response => response.json())
       .then(result => {
         console.log(result);
         this.setState({data: result.data});
+      })
+      .catch(error => console.log('error', error));
+  }
+  detailPengajuan(id) {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    };
+
+    fetch(
+      `https://aplikasi-santri.herokuapp.com/api/detail/${id}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        this.props.navigation.navigate('DetailRiwayat', {
+          id: result.data.user_id,
+          type: result.data.type,
+          created_at: result.data.created_at,
+          nominal: result.data.nominal,
+          pict: result.data.pict,
+          status: result.data.status,
+        });
       })
       .catch(error => console.log('error', error));
   }
@@ -231,7 +221,8 @@ export default class Dashboard2 extends Component {
                       justifyContent: 'center',
                       alignItems: 'center',
                       marginTop: 12,
-                    }}>
+                    }}
+                    onPress={() => this.detailPengajuan(value.id)}>
                     <Text
                       style={{
                         fontSize: 12,
