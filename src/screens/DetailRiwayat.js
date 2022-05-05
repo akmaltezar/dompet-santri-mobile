@@ -4,22 +4,32 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  Image,
 } from 'react-native';
 import React, {Component} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Modal from 'react-native-modal';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 class DetailRiwayat extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       id: '',
       type: '',
       created_at: '',
       nominal: '',
-      pict: '',
+      pict: null,
+      status: '',
+      username: '',
+      modalVisible: false,
     };
   }
 
@@ -30,6 +40,8 @@ class DetailRiwayat extends Component {
       created_at: this.props.route.params.created_at,
       nominal: this.props.route.params.nominal,
       pict: this.props.route.params.pict,
+      status: this.props.route.params.status,
+      username: this.props.route.params.username,
     });
   }
 
@@ -45,20 +57,30 @@ class DetailRiwayat extends Component {
         </View>
         <View style={styles.detailView}>
           <View style={styles.dataView}>
-            <Text style={styles.data}>User Id :</Text>
+            <Text style={styles.data}>Nama Santri : </Text>
+            <Text style={styles.data}>Id Transaksi :</Text>
             <Text style={styles.data}>Jenis Transaksi :</Text>
             <Text style={styles.data}>Tanggal Transaksi :</Text>
             <Text style={styles.data}>Nominal :</Text>
+            <Text style={styles.data}>Status : </Text>
             <Text style={styles.data}>Bukti Transfer :</Text>
           </View>
+
           <View style={styles.valueView}>
+            <Text style={styles.value}>{this.state.username}</Text>
             <Text style={styles.value}>{this.state.id}</Text>
             <Text style={styles.value}>{this.state.type}</Text>
             <Text style={styles.value}>
               {this.state.created_at.substr(0, 10)}
             </Text>
             <Text style={styles.value}>Rp. {this.state.nominal}</Text>
-            <TouchableOpacity>
+            {this.state.status === 'Success' ? (
+              <Text style={styles.succes}>{this.state.status}</Text>
+            ) : (
+              <Text style={styles.canceled}>{this.state.status}</Text>
+            )}
+            <TouchableOpacity
+              onPress={() => this.setState({modalVisible: true})}>
               <Text
                 style={{
                   fontFamily: 'Montserrat-SemiBold',
@@ -70,6 +92,17 @@ class DetailRiwayat extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        <Modal
+          isVisible={this.state.modalVisible}
+          animationIn="slideInUp"
+          onBackdropPress={() => this.setState({modalVisible: false})}>
+          <View style={styles.modalView}>
+            <Image
+              source={{uri: this.state.pict}}
+              style={{width: wp('50%'), height: hp('50%')}}
+            />
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -100,8 +133,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    width: screenWidth * 0.9,
-    height: screenHeight * 0.15,
+    width: wp('90%'),
+    height: hp('20%'),
     borderRadius: 10,
     borderBottomWidth: 1,
     borderColor: '#C4C4C4',
@@ -116,11 +149,31 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   data: {
-    fontSize: 14,
+    color: '#000000',
+    fontSize: 15,
     fontFamily: 'Montserrat-Regular',
   },
   value: {
+    color: '#000000',
     fontFamily: 'Montserrat-SemiBold',
-    fontSize: 14,
+    fontSize: 15,
+  },
+  modalView: {
+    backgroundColor: '#FFFFFF',
+    width: wp('50%'),
+    height: hp('50%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    left: '24%',
+  },
+  succes: {
+    fontSize: 15,
+    color: '#8388FF',
+    fontFamily: 'Montserrat-SemiBold',
+  },
+  canceled: {
+    fontSize: 15,
+    color: '#E31212',
+    fontFamily: 'Montserrat-SemiBold',
   },
 });
