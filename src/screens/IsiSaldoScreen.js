@@ -4,12 +4,13 @@ import {
   View,
   Image,
   Dimensions,
-  Modal,
   TextInput,
   ActivityIndicator,
   TouchableOpacity,
+  PermissionsAndroid,
   ToastAndroid,
 } from 'react-native';
+import Modal from "react-native-modal"
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -28,12 +29,60 @@ const IsiSaldoScreen = ({navigation}) => {
   const [nominal, setNominal] = useState(0);
   const [uri, setUri] = React.useState(null);
   const [resPhoto, setResPhoto] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [image, setImage] = useState({
     name: '',
     uri: '',
     type: '',
   });
-  const [loading, setLoading] = useState(false);
+  
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "Dompet Santri Camera Permission",
+          message:"This app needs access to your camera",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        openCamera()
+        console.log("Camera permission given");
+      } else {
+        ToastAndroid.show("Go to App Info to allow the permission", ToastAndroid.SHORT)
+        console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const requestGalleryPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: "Dompet Santri Storage Permission",
+          message:"This app needs access to your storage",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        openGallery()
+        console.log("Storage permission given");
+      } else {
+        ToastAndroid.show("Go to App Info to allow the permission", ToastAndroid.SHORT)
+        console.log("Storage permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   const openCamera = () => {
     const options = {
@@ -123,7 +172,7 @@ const IsiSaldoScreen = ({navigation}) => {
         console.log('ini result', result);
         navigation.goBack('HomeScreen');
       })
-      .catch(error => console.log('ini error', error))
+      .catch(error => console.log('itu error', error))
       .finally(() => setLoading(false));
   }
 
@@ -141,7 +190,7 @@ const IsiSaldoScreen = ({navigation}) => {
       </View>
       <View style={styles.textFrame}>
         <Text style={styles.steps}>
-          1. Kirim uang ke rekening BSI : 3000044 a/n Adam Syahputra
+          1. Kirim uang ke rekening BSI : 7154956028 a/n Akmal Tezar
         </Text>
         <Text style={styles.steps}>
           2. Tambahkan no unik pada nominal isi saldo, contoh : 50,021
@@ -184,70 +233,15 @@ const IsiSaldoScreen = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          this.setModalVisible(!modalVisible);
-        }}>
+        isVisible={modalVisible}
+        animationIn="slideInUp"
+        onBackdropPress={() => setModalVisible(false)}>
         <View style={styles.modalView}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#8388FF',
-              paddingVertical: 10,
-              marginVertical: 4,
-              width: screenWidth * 0.5,
-              borderRadius: 12,
-            }}
-            onPress={() => openCamera()}>
-            <Text
-              style={{
-                textAlign: 'center',
-                color: '#FFFFFF',
-                fontFamily: 'Montserrat-SemiBold',
-                fontSize: 14,
-              }}>
-              Ambil dengan Kamera
-            </Text>
+          <TouchableOpacity onPress={() => requestCameraPermission()}>
+            <Text style={styles.modaltext}>Ambil dari Kamera</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#FFE066',
-              paddingVertical: 10,
-              marginVertical: 4,
-              width: screenWidth * 0.5,
-              borderRadius: 12,
-            }}
-            onPress={() => openGallery()}>
-            <Text
-              style={{
-                textAlign: 'center',
-                color: '#FFFFFF',
-                fontFamily: 'Montserrat-SemiBold',
-                fontSize: 14,
-              }}>
-              Ambil dari Galeri
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#808080',
-              paddingVertical: 10,
-              marginVertical: 4,
-              width: screenWidth * 0.5,
-              borderRadius: 12,
-            }}
-            onPress={() => setModalVisible(!modalVisible)}>
-            <Text
-              style={{
-                textAlign: 'center',
-                color: '#FFFFFF',
-                fontFamily: 'Montserrat-SemiBold',
-                fontSize: 14,
-              }}>
-              Batalkan
-            </Text>
+          <TouchableOpacity onPress={() => requestGalleryPermission()}>
+            <Text style={styles.modaltext}>Ambil dari Galeri</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -326,12 +320,20 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   modalView: {
-    backgroundColor: '#ffffff',
-    padding: 10,
-    borderRadius: 12,
-    elevation: 30,
-    position: 'absolute',
-    top: hp('34%'),
-    left: wp('22%'),
+    backgroundColor: '#FFFFFF',
+    width: wp('70%'),
+    height: hp('14%'),
+    left : '10%',
+    borderRadius : 10,
+    justifyContent: 'center',
+    alignItems : 'flex-start',
+    paddingLeft : '5%'
   },
+  modaltext: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 17,
+    color: '#000000',
+    margin: 8,
+  },
+
 });
