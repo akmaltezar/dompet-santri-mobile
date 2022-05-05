@@ -7,9 +7,14 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  StyleSheet
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const ww = Dimensions.get('window').width;
 
@@ -20,6 +25,7 @@ export default class Login extends React.Component {
       email: '',
       password: '',
       loading: false,
+      eye: true,
     };
   }
 
@@ -60,111 +66,111 @@ export default class Login extends React.Component {
   }
 
   render() {
-    const navigation = this.props.navigation;
     return (
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          flex: 1,
-          backgroundColor: 'white',
-        }}>
-        <View style={{alignSelf: 'flex-start', marginLeft: 50}}>
-          <Text
-            style={{
-              color: '#8388FF',
-              fontSize: 24,
-              fontFamily: 'Montserrat-Bold',
-            }}>
-            Dompet Santri
-          </Text>
-          <Text
-            style={{
-              color: '#8388FF',
-              fontSize: 24,
-              alignSelf: 'flex-start',
-              fontFamily: 'Montserrat-Bold',
-            }}>
-            Login
-          </Text>
+      <View style={styles.container}>
+      <View style={styles.titleView}>
+        <Text style={styles.title}>Dompet Santri</Text>
+        <Text style={styles.title}>Login</Text>
+      </View>
+      <View style={{alignItems: 'center'}}>
+        <View style={styles.inputView}>
+          <Icon name="email-outline" size={28} color="#8388FF" />
+          <TextInput
+            placeholder="Alamat Email"
+            onChangeText={email => this.setState({email})}
+            autoCapitalize="none"
+            style={styles.input}
+          />
         </View>
-        <View style={{marginTop: 20, marginBottom: 30}}>
-          <View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Icon
-                name="email-outline"
-                size={25}
-                color="#8388FF"
-                // style={{width: 24, height: 24, marginRight: 10}}
-              />
-              <TextInput
-                placeholder="Email"
-                style={{width: 220}}
-                onChangeText={email => this.setState({email})}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
-            <View
-              style={{backgroundColor: '#8388FF', height: 1, width: ww - 100}}
-            />
-          </View>
-          <View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Icon
-                name="lock-outline"
-                size={25}
-                color="#8388FF"
-                // style={{width: 24, height: 24, marginRight: 10}}
-              />
-              <TextInput
-                placeholder="Kata Sandi"
-                style={{width: 220}}
-                onChangeText={password => this.setState({password})}
-                secureTextEntry={true}
-              />
-            </View>
-            <View
-              style={{backgroundColor: '#8388FF', height: 1, width: ww - 100}}
-            />
-          </View>
-        </View>
-        <View>
+
+        <View style={styles.inputView2}>
+          <Icon name="lock-outline" size={28} color="#8388FF" />
+          <TextInput
+            onChangeText={password => this.setState({password})}
+            placeholder="Kata Sandi"
+            secureTextEntry={this.state.eye}
+            style={styles.input}
+          />
           <TouchableOpacity
-            onPress={() => this.Login()}
-            style={{
-              backgroundColor: '#8388FF',
-              height: 45,
-              width: ww - 100,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 10,
-              marginBottom: 20,
-            }}>
-            {this.state.loading ? (
-              <ActivityIndicator size={25} color="#FFF" />
-            ) : (
-              <Text style={{color: 'white', fontFamily: 'Montserrat-SemiBold'}}>
-                MASUK
-              </Text>
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#8388FF',
-              height: 45,
-              width: ww - 100,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 10,
-            }}
-            onPress={() => this.props.navigation.navigate('RegisterScreen')}>
-            <Text style={{color: 'white', fontFamily: 'Montserrat-SemiBold'}}>
-              DAFTAR
-            </Text>
+            onPressOut={() => this.setState({eye: !this.state.eye})}>
+            <Icon name="eye-outline" size={28} color="#8388FF" />
           </TouchableOpacity>
         </View>
       </View>
+      <View
+        style={{
+          alignItems: 'center',
+          marginTop: '10%',
+        }}>
+        <TouchableOpacity style={styles.button} onPress={() => this.Login()} >
+          {this.state.loading ? (
+            <ActivityIndicator size={25} color="#FFFFFF" />
+          ) : (
+            <Text style={styles.buttonText}>MASUK</Text>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.props.navigation.navigate('RegisterScreen')}>
+          <Text style={styles.buttonText}>DAFTAR</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  titleView: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    paddingLeft: '10%',
+    marginBottom: '10%',
+  },
+  title: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 30,
+    color: '#8388FF',
+  },
+  inputView: {
+    flexDirection: 'row',
+    width: wp('80%'),
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#8388FF',
+    marginBottom: '2%',
+  },
+  inputView2: {
+    flexDirection: 'row',
+    width: wp('80%'),
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#8388FF',
+    marginBottom: '2%',
+  },
+  input: {
+    width: wp('65%'),
+    backgroundColor: '#FFFFFF',
+  },
+  button: {
+    backgroundColor: '#8388FF',
+    width: wp('80%'),
+    height: hp('6%'),
+    marginBottom: '3%',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#FFFFFF',
+    fontSize: 17,
+  }
+});
