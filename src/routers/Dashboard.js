@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-import DashboardPengajuanScreen from '../screens/DashboardPengajuanScreen';
-import Dash2 from '../screens/dash2';
+import DashboardPengajuan from '../screens/DashboardPengajuan/index';
+import DashboardRiwayat from '../screens/DashboardRiwayat/index';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -16,8 +16,8 @@ export default class Dashboard extends Component {
           tabBarLabelStyle: {fontSize: 14, fontFamily: 'Montserrat-SemiBold'},
           tabBarStyle: {backgroundColor: '#FFF'},
         }}>
-        <Tab.Screen name="Pengajuan" component={DashboardPengajuanScreen} />
-        <Tab.Screen name="Riwayat" component={Dash2} />
+        <Tab.Screen name="Pengajuan" component={DashboardPengajuan} />
+        <Tab.Screen name="Riwayat" component={DashboardRiwayat} />
       </Tab.Navigator>
     );
   }

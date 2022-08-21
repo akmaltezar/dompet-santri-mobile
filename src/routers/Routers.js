@@ -1,18 +1,16 @@
 import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SplashScreen from '../screens/splash';
-import LoginScreen from '../screens/login';
-import RegisterScreen from '../screens/RegisterScreen';
-import HomeScreen from '../screens/HomeScreen';
-import IsiSaldoScreen from '../screens/IsiSaldoScreen';
-import TarikDanaScreen from '../screens/tarikdana';
-import ScannerScreen from '../screens/ScannerScreen';
-import DetailRiwayat from '../screens/DetailRiwayat';
-import DetailPengajuan from '../screens/Pengajuan';
-import TransferScreen from '../screens/TransferScreen';
+import SplashScreen from '../screens/Splashcreen';
+import Login from '../screens/Login';
+import Register from '../screens/Register';
+import Homescreen from '../screens/Homescreen';
+import Bayar from '../screens/Bayar';
+import IsiSaldo from '../screens/IsiSaldo';
+import TarikDana from '../screens/TarikDana';
+import TransferDana from '../screens/TransferDana';
+import DetailTransaksi from '../screens/DetailTransaksi';
 import Profile from '../screens/Profile';
-import RiwayatTransaksi from '../screens/RiwayatTransaksi';
 import Dashboard from './Dashboard';
 
 const Stack = createNativeStackNavigator();
@@ -23,12 +21,12 @@ export default class Routers extends Component {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
-          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen name="IsiSaldoScreen" component={IsiSaldoScreen} />
-          <Stack.Screen name="TarikDanaScreen" component={TarikDanaScreen} />
-          <Stack.Screen name="ScannerScreen" component={ScannerScreen} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Homescreen" component={Homescreen} />
+          <Stack.Screen name="IsiSaldo" component={IsiSaldo} />
+          <Stack.Screen name="TarikDana" component={TarikDana} />
+          <Stack.Screen name="Bayar" component={Bayar} />
           <Stack.Screen
             name="Dashboard"
             component={Dashboard}
@@ -43,9 +41,8 @@ export default class Routers extends Component {
               },
             }}
           />
-          <Stack.Screen name="DetailRiwayat" component={DetailRiwayat} />
-          <Stack.Screen name="Detail Pengajuan" component={DetailPengajuan} />
-          <Stack.Screen name="TransferScreen" component={TransferScreen} />
+          <Stack.Screen name="DetailTransaksi" component={DetailTransaksi} />
+          <Stack.Screen name="TransferDana" component={TransferDana} />
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="Riwayat Transaksi" component={RiwayatTransaksi} />
         </Stack.Navigator>
