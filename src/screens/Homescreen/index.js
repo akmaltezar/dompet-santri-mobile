@@ -72,7 +72,7 @@ export default class HomeScreen extends Component {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.props.navigation.navigate('ScannerScreen', {
+        this.props.navigation.navigate('Bayar', {
           balance: this.state.balance,
         });
         console.log('Camera permission given');
@@ -144,7 +144,7 @@ export default class HomeScreen extends Component {
       .then(result => {
         console.log(result);
         if (result.data.status === 'Waiting') {
-          this.props.navigation.navigate('Detail Pengajuan', {
+          this.props.navigation.navigate('DetailTransaksi', {
             id: result.data.id,
             type: result.data.type,
             created_at: result.data.created_at,
@@ -154,7 +154,7 @@ export default class HomeScreen extends Component {
             username: result.data.user.substr(16, 14),
           });
         } else {
-          this.props.navigation.navigate('DetailRiwayat', {
+          this.props.navigation.navigate('DetailTransaksi', {
             id: result.data.id,
             type: result.data.type,
             created_at: result.data.created_at,
@@ -182,7 +182,7 @@ export default class HomeScreen extends Component {
       .then(result => {
         console.log(result);
         AsyncStorage.clear();
-        this.props.navigation.replace('LoginScreen');
+        this.props.navigation.replace('Login');
         // alert(result.message);
       })
       .catch(error => console.log('error', error));
@@ -231,7 +231,7 @@ export default class HomeScreen extends Component {
                     />
                   ) : (
                     <Image
-                      source={require('../assets/images/profile.png')}
+                      source={require('../../assets/images/profile.png')}
                       style={{width: '100%', height: '100%'}}
                     />
                   )}
@@ -259,9 +259,7 @@ export default class HomeScreen extends Component {
             <View style={styles.buttonGroup}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() =>
-                  this.props.navigation.navigate('IsiSaldoScreen')
-                }>
+                onPress={() => this.props.navigation.navigate('IsiSaldo')}>
                 <Icons
                   name="format-vertical-align-top"
                   size={30}
@@ -274,7 +272,7 @@ export default class HomeScreen extends Component {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() =>
-                  this.props.navigation.navigate('TarikDanaScreen', {
+                  this.props.navigation.navigate('TarikDana', {
                     balance: this.state.balance,
                   })
                 }>
@@ -290,7 +288,7 @@ export default class HomeScreen extends Component {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() =>
-                  this.props.navigation.navigate('TransferScreen', {
+                  this.props.navigation.navigate('TransferDana', {
                     balance: this.state.balance,
                   })
                 }>

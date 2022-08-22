@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -49,7 +49,7 @@ export default class Login extends React.Component {
         if (result.code === 200) {
           AsyncStorage.setItem('token', result.data.token);
           alert('Login Success.');
-          this.props.navigation.replace('HomeScreen');
+          this.props.navigation.replace('Homescreen');
         } else {
           alert('Fill the form correctly.');
         }
@@ -68,54 +68,54 @@ export default class Login extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      <View style={styles.titleView}>
-        <Text style={styles.title}>Dompet Santri</Text>
-        <Text style={styles.title}>Login</Text>
-      </View>
-      <View style={{alignItems: 'center'}}>
-        <View style={styles.inputView}>
-          <Icon name="email-outline" size={28} color="#8388FF" />
-          <TextInput
-            placeholder="Alamat Email"
-            onChangeText={email => this.setState({email})}
-            autoCapitalize="none"
-            style={styles.input}
-          />
+        <View style={styles.titleView}>
+          <Text style={styles.title}>Dompet Santri</Text>
+          <Text style={styles.title}>Login</Text>
         </View>
+        <View style={{alignItems: 'center'}}>
+          <View style={styles.inputView}>
+            <Icon name="email-outline" size={28} color="#8388FF" />
+            <TextInput
+              placeholder="Alamat Email"
+              onChangeText={email => this.setState({email})}
+              autoCapitalize="none"
+              style={styles.input}
+            />
+          </View>
 
-        <View style={styles.inputView2}>
-          <Icon name="lock-outline" size={28} color="#8388FF" />
-          <TextInput
-            onChangeText={password => this.setState({password})}
-            placeholder="Kata Sandi"
-            secureTextEntry={this.state.eye}
-            style={styles.input}
-          />
+          <View style={styles.inputView2}>
+            <Icon name="lock-outline" size={28} color="#8388FF" />
+            <TextInput
+              onChangeText={password => this.setState({password})}
+              placeholder="Kata Sandi"
+              secureTextEntry={this.state.eye}
+              style={styles.input}
+            />
+            <TouchableOpacity
+              onPressOut={() => this.setState({eye: !this.state.eye})}>
+              <Icon name="eye-outline" size={28} color="#8388FF" />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          style={{
+            alignItems: 'center',
+            marginTop: '10%',
+          }}>
+          <TouchableOpacity style={styles.button} onPress={() => this.Login()}>
+            {this.state.loading ? (
+              <ActivityIndicator size={25} color="#FFFFFF" />
+            ) : (
+              <Text style={styles.buttonText}>MASUK</Text>
+            )}
+          </TouchableOpacity>
           <TouchableOpacity
-            onPressOut={() => this.setState({eye: !this.state.eye})}>
-            <Icon name="eye-outline" size={28} color="#8388FF" />
+            style={styles.button}
+            onPress={() => this.props.navigation.navigate('RegisterScreen')}>
+            <Text style={styles.buttonText}>DAFTAR</Text>
           </TouchableOpacity>
         </View>
       </View>
-      <View
-        style={{
-          alignItems: 'center',
-          marginTop: '10%',
-        }}>
-        <TouchableOpacity style={styles.button} onPress={() => this.Login()} >
-          {this.state.loading ? (
-            <ActivityIndicator size={25} color="#FFFFFF" />
-          ) : (
-            <Text style={styles.buttonText}>MASUK</Text>
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => this.props.navigation.navigate('RegisterScreen')}>
-          <Text style={styles.buttonText}>DAFTAR</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
     );
   }
 }
@@ -172,5 +172,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     color: '#FFFFFF',
     fontSize: 17,
-  }
+  },
 });

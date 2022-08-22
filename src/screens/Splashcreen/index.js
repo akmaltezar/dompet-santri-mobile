@@ -8,9 +8,9 @@ export default class SplashScreen extends React.Component {
     setTimeout(() => {
       AsyncStorage.getItem('token').then(value => {
         if (value != null) {
-          this.props.navigation.replace('HomeScreen');
+          this.props.navigation.replace('Homescreen');
         } else {
-          this.props.navigation.replace('LoginScreen');
+          this.props.navigation.replace('Login');
         }
       });
     }, 3000);

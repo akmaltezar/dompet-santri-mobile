@@ -9,6 +9,7 @@ import Bayar from '../screens/Bayar';
 import IsiSaldo from '../screens/IsiSaldo';
 import TarikDana from '../screens/TarikDana';
 import TransferDana from '../screens/TransferDana';
+import RiwayatTransaksi from '../screens/RiwayatTransaksi';
 import DetailTransaksi from '../screens/DetailTransaksi';
 import Profile from '../screens/Profile';
 import Dashboard from './Dashboard';

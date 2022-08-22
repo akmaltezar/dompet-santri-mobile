@@ -1,12 +1,5 @@
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import React, {Component, useState, useEffect} from 'react';
-
+import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -15,7 +8,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import QRCode from 'react-native-qrcode-generator';
-import Modal from 'react-native-modal'
+import Modal from 'react-native-modal';
 import {useNavigation} from '@react-navigation/native';
 
 const Profile = () => {
@@ -172,7 +165,6 @@ const Profile = () => {
             bgColor="black"
             fgColor="white"
           />
-   
         </View>
       </Modal>
 
@@ -221,7 +213,7 @@ const styles = StyleSheet.create({
     marginVertical: '5%',
     backgroundColor: '#8388FF',
     width: '35%',
-    height: '38%',
+    height: '43%',
     borderRadius: 55,
     justifyContent: 'center',
     alignItems: 'center',
@@ -283,11 +275,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     width: wp('70%'),
     height: hp('12%'),
-    left : '10%',
-    borderRadius : 10,
+    left: '10%',
+    borderRadius: 10,
     justifyContent: 'center',
-    alignItems : 'flex-start',
-    paddingLeft : '5%'
+    alignItems: 'flex-start',
+    paddingLeft: '5%',
   },
   qrText: {
     fontSize: 14,

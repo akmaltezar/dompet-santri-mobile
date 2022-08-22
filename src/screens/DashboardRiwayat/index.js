@@ -69,8 +69,9 @@ export default class Dashboard2 extends Component {
       .then(response => response.json())
       .then(result => {
         console.log(result);
-        this.props.navigation.navigate('DetailRiwayat', {
+        this.props.navigation.navigate('DetailTransaksi', {
           id: result.data.user_id,
+          name: result.data.user,
           type: result.data.type,
           created_at: result.data.created_at,
           nominal: result.data.nominal,

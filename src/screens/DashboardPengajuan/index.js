@@ -73,7 +73,7 @@ export default class DashboardPengajuan extends Component {
       .then(response => response.json())
       .then(result => {
         console.log(result);
-        this.props.navigation.navigate('Detail Pengajuan', {
+        this.props.navigation.navigate('DetailTransaksi', {
           id: result.data.id,
           type: result.data.type,
           created_at: result.data.created_at,

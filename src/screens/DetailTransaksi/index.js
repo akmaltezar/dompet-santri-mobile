@@ -28,7 +28,7 @@ class DetailRiwayat extends Component {
       nominal: '',
       pict: null,
       status: '',
-      username: '',
+      user: {},
       modalVisible: false,
     };
   }
@@ -41,7 +41,7 @@ class DetailRiwayat extends Component {
       nominal: this.props.route.params.nominal,
       pict: this.props.route.params.pict,
       status: this.props.route.params.status,
-      username: this.props.route.params.username,
+      user: this.props.route.params.name,
     });
   }
 
@@ -67,7 +67,7 @@ class DetailRiwayat extends Component {
           </View>
 
           <View style={styles.valueView}>
-            <Text style={styles.value}>{this.state.username}</Text>
+            <Text style={styles.value}>{this.state.user.name}</Text>
             <Text style={styles.value}>{this.state.id}</Text>
             <Text style={styles.value}>{this.state.type}</Text>
             <Text style={styles.value}>
