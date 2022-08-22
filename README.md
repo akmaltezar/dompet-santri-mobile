@@ -5,6 +5,7 @@ Dompet Santri adalah Mini Project ke-2 yang saya kerjakan secara berkelompok yan
   2. [Muhammad Afif](https://github.com/ehpip)
   3. [Achmed Bintang](https://github.com/achmedbintangea)
   4. [Raihan Alwan](https://github.com/HanNPC)
+  5. [Muhammad Nasrullah](https://github.com/muhammadnasrullah756)
   
 Aplikasi ini terintegrasi dengan [API] (https://documenter.getpostman.com/view/18855111/UVkjxJUQ#e6c2a1ae-07e2-410e-ab99-82741e94932e)
 
